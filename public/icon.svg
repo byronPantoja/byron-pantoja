@@ -1,26 +1,50 @@
 <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
     @media (prefers-color-scheme: light) {
-      .background { fill: black; }
-      .foreground { fill: white; }
+    .bg { fill: #1A1A1A; }
+    .fg { fill: #FFFFFF; }
     }
     @media (prefers-color-scheme: dark) {
-      .background { fill: white; }
-      .foreground { fill: black; }
+    .bg { fill: #FFFFFF; }
+    .fg { fill: #1A1A1A; }
     }
   </style>
-  <g clip-path="url(#clip0_7960_43945)">
-    <rect class="background" width="180" height="180" rx="37" />
-    <g style="transform: scale(95%); transform-origin: center">
-      <path class="foreground"
-        d="M101.141 53H136.632C151.023 53 162.689 64.6662 162.689 79.0573V112.904H148.112V79.0573C148.112 78.7105 148.098 78.3662 148.072 78.0251L112.581 112.898C112.701 112.902 112.821 112.904 112.941 112.904H148.112V126.672H112.941C98.5504 126.672 86.5638 114.891 86.5638 100.5V66.7434H101.141V100.5C101.141 101.15 101.191 101.792 101.289 102.422L137.56 66.7816C137.255 66.7563 136.945 66.7434 136.632 66.7434H101.141V53Z" />
-      <path class="foreground"
-        d="M65.2926 124.136L14 66.7372H34.6355L64.7495 100.436V66.7372H80.1365V118.47C80.1365 126.278 70.4953 129.958 65.2926 124.136Z" />
-    </g>
-  </g>
   <defs>
-    <clipPath id="clip0_7960_43945">
-      <rect width="180" height="180" fill="white" />
+    <clipPath id="c">
+      <rect width="180" height="180" rx="37" />
     </clipPath>
   </defs>
+  <g clip-path="url(#c)">
+    <rect class="bg" width="180" height="180" rx="37" />
+    <g transform="translate(90,90) scale(0.85) translate(-90,-90)">
+      <!-- B: clean geometric with proper proportions -->
+      <path class="fg" d="
+        M 28 40 L 28 140 L 66 140
+        C 82 140 93 130 93 117
+        C 93 108 87 101 79 97
+        C 86 93 90 86 90 78
+        C 90 62 78 52 64 52
+        L 44 52 L 44 40 L 28 40 Z
+        M 44 62 L 62 62
+        C 70 62 76 67 76 75
+        C 76 83 70 88 62 88
+        L 44 88 Z
+        M 44 98 L 65 98
+        C 74 98 80 104 80 112.5
+        C 80 121 74 128 65 128
+        L 44 128 Z
+      " />
+      <!-- P: matching weight -->
+      <path class="fg" d="
+        M 102 40 L 102 140 L 118 140 L 118 105 L 138 105
+        C 152 105 162 93 162 79
+        C 162 63 152 52 138 52
+        L 118 52 L 118 40 L 102 40 Z
+        M 118 62 L 136 62
+        C 144 62 149 68 149 76
+        C 149 86 144 93 136 93
+        L 118 93 Z
+      " />
+    </g>
+  </g>
 </svg>
