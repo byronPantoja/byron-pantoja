@@ -1,250 +1,284 @@
-'use client'
+import { Header } from '@/components/header'
+import { Footer } from '@/components/footer'
+import { Hero } from '@/components/hero'
+import { ProjectCard } from '@/components/project-card'
+import { ExperienceTimeline } from '@/components/experience-timeline'
+import { SkillsGrid } from '@/components/skills-grid'
+import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import { Mail, ExternalLink } from 'lucide-react'
 
-import { Menu, X, ArrowRight } from 'lucide-react'
-import { useState } from 'react'
-import Link from 'next/link'
+const projects = [
+  {
+    title: 'Coffee For Peace',
+    description: 'Directed operations, culture, and strategy for a social enterprise dedicated to coffee and social impact. Built brand, managed teams, and scaled impact across multiple initiatives.',
+    skills: ['Operations', 'Brand Strategy', 'Team Leadership', 'Social Impact'],
+    year: '2010 - Present',
+    highlight: true,
+  },
+  {
+    title: 'Kapeyapaan Platform',
+    description: 'Web platform for a social enterprise. Designed and developed user-facing features focused on accessibility and impact measurement.',
+    skills: ['React', 'Web Design', 'UX/UI', 'Social Impact'],
+    year: '2022',
+  },
+
+  {
+    title: 'Dalaga Beauty',
+    description: 'E-commerce site and brand identity for a beauty brand. Focused on clean design, product storytelling, and conversion optimization.',
+    skills: ['E-commerce', 'Brand Design', 'Web Development', 'Product Strategy'],
+    year: '2023',
+  },
+  {
+    title: 'Notes Flower Shop',
+    description: 'Web presence and visual identity for a local flower shop. Emphasized craft, seasonality, and community connection.',
+    skills: ['Web Design', 'Visual Identity', 'Local Commerce', 'Photography'],
+    year: '2022',
+  },
+  {
+    title: 'Brand Strategy Consulting',
+    description: 'Ongoing consulting work with social enterprises and purpose-driven brands on strategy, positioning, and visual identity.',
+    skills: ['Consulting', 'Brand Strategy', 'Positioning', 'Creative Direction'],
+    year: '2020 - Present',
+  },
+]
+
+const experienceItems = [
+  {
+    title: 'Director of Operations & Culture',
+    company: 'Coffee For Peace',
+    period: '2010 - Present',
+    description: 'Built and scaled social enterprise from concept to thriving organization. Directed operations, shaped company culture, managed teams, and drove strategic initiatives.',
+    highlights: [
+      'Grew organization from startup to 50+ employees',
+      'Led brand strategy and visual identity development',
+      'Managed cross-functional teams across operations, marketing, and social impact',
+      'Scaled social enterprise model to multiple locations',
+    ],
+    skills: ['Leadership', 'Operations', 'Strategy', 'Brand Building', 'Team Management'],
+  },
+  {
+    title: 'Freelance Web Developer',
+    company: 'Independent',
+    period: '2020 - Present',
+    description: 'Designed and developed web experiences for social enterprises, local businesses, and purpose-driven brands. Focus on intentional design and accessible technology.',
+    highlights: [
+      'Built 15+ custom web projects for mission-driven clients',
+      'Specialize in responsive design and user experience',
+      'Collaborated with brands on digital strategy',
+      'Mentored junior developers on best practices',
+    ],
+    skills: ['React', 'Next.js', 'Web Design', 'UX/UI', 'JavaScript', 'CSS'],
+  },
+  {
+    title: 'Brand Strategist',
+    company: 'Various Social Enterprises',
+    period: '2015 - Present',
+    description: 'Provided strategic brand consulting to social enterprises and nonprofits. Helped define positioning, visual identity, and marketing strategy.',
+    highlights: [
+      'Developed brand strategies for 10+ organizations',
+      'Created visual identity systems and design guidelines',
+      'Guided brand positioning and messaging frameworks',
+      'Designed marketing campaigns and digital presence',
+    ],
+    skills: ['Brand Strategy', 'Positioning', 'Visual Design', 'Marketing', 'Communication'],
+  },
+]
+
+const skillCategories = [
+  {
+    category: 'Web Development',
+    skills: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'Node.js'],
+    highlight: true,
+  },
+  {
+    category: 'Design',
+    skills: ['UI/UX', 'Visual Identity', 'Brand Strategy', 'Responsive Design', 'Accessibility', 'Design Systems'],
+  },
+  {
+    category: 'Operations',
+    skills: ['Project Management', 'Team Leadership', 'Strategic Planning', 'Process Optimization', 'Budget Management'],
+  },
+  {
+    category: 'Brand & Creative',
+    skills: ['Brand Strategy', 'Creative Direction', 'Copywriting', 'Campaign Design', 'Marketing Strategy'],
+  },
+  {
+    category: 'Tools & Platforms',
+    skills: ['Figma', 'Git', 'Vercel', 'Firebase', 'PostgreSQL', 'Supabase'],
+  },
+  {
+    category: 'Soft Skills',
+    skills: ['Problem Solving', 'Communication', 'Collaboration', 'Strategic Thinking', 'Mentorship'],
+  },
+]
 
 export default function Home() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-  const services = [
-    {
-      title: 'Graphic & Digital Design',
-      description: 'Compelling visual systems that elevate brands and drive engagement across all platforms.',
-    },
-    {
-      title: 'Video & Motion Production',
-      description: 'Dynamic content that captures attention and communicates your message with impact.',
-    },
-    {
-      title: 'Brand & Content Strategy',
-      description: 'Strategic frameworks that align messaging with business goals for sustainable growth.',
-    },
-    {
-      title: 'Copywriting',
-      description: 'Persuasive, on-brand language that resonates with your audience and drives action.',
-    },
-    {
-      title: 'Web Development',
-      description: 'Scalable, performant digital experiences built on modern web technologies.',
-    },
-  ]
-
-  const process = [
-    {
-      number: '01',
-      title: 'Discovery',
-      description: 'We immerse ourselves in your brand, market, and audience to uncover strategic insights.',
-    },
-    {
-      number: '02',
-      title: 'Strategy',
-      description: 'We develop comprehensive frameworks that guide design and content decisions.',
-    },
-    {
-      number: '03',
-      title: 'Execution',
-      description: 'We craft cohesive creative systems that deliver clarity, consistency, and results.',
-    },
-  ]
-
   return (
-    <div className="bg-background text-foreground">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-sm z-50 border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 md:h-20">
-            <div className="flex-shrink-0">
-              <span className="text-xl md:text-2xl font-bold text-primary">DBP</span>
-            </div>
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <Header />
 
-            {/* Desktop menu */}
-            <div className="hidden md:flex items-center gap-8">
-              <a href="#services" className="text-sm hover:text-primary transition-colors">Services</a>
-              <a href="#process" className="text-sm hover:text-primary transition-colors">Process</a>
-              <a href="#contact" className="text-sm hover:text-primary transition-colors">Contact</a>
-              <button className="px-6 py-2.5 bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity">
-                Get Started
-              </button>
-            </div>
+      <main className="flex-1">
+        {/* Hero Section */}
+        <Hero />
 
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-
-          {/* Mobile menu */}
-          {mobileMenuOpen && (
-            <div className="md:hidden pb-4 border-t border-border">
-              <a href="#services" className="block py-2 text-sm hover:text-primary">Services</a>
-              <a href="#process" className="block py-2 text-sm hover:text-primary">Process</a>
-              <a href="#contact" className="block py-2 text-sm hover:text-primary">Contact</a>
-              <button className="w-full mt-4 px-6 py-2.5 bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity">
-                Get Started
-              </button>
-            </div>
-          )}
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="pt-32 md:pt-48 pb-20 md:pb-32 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="mb-6">
-            <span className="inline-block px-4 py-2 bg-muted text-muted-foreground text-xs font-semibold rounded-full">CREATIVE SYSTEMS</span>
-          </div>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance">
-            Design. Build. <span className="text-primary">Operate.</span>
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-balance">
-            Partner with DBP to create scalable creative systems that drive clarity, consistency, and measurable growth across your digital platforms.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-3.5 bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity inline-flex items-center justify-center gap-2">
-              Start Your Project
-              <ArrowRight size={18} />
-            </button>
-            <button className="px-8 py-3.5 border border-border text-foreground font-medium hover:bg-muted transition-colors">
-              View Our Work
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section id="services" className="py-20 md:py-32 px-4 sm:px-6 lg:px-8 bg-muted/30">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16 md:mb-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
-              What We Do
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive creative solutions tailored to your brand's unique needs and ambitions.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <div
-                key={index}
-                className="group p-8 border border-border hover:border-primary hover:bg-background transition-all duration-300 cursor-pointer"
-              >
-                <div className="mb-4 w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold group-hover:scale-110 transition-transform">
-                  {String(index + 1).padStart(2, '0')}
-                </div>
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
-                  {service.title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {service.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Process Section */}
-      <section id="process" className="py-20 md:py-32 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16 md:mb-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
-              Our Approach
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              A structured methodology that ensures every project delivers strategic value and creative excellence.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {process.map((step, index) => (
-              <div key={index} className="relative">
-                <div className="mb-8">
-                  <div className="text-6xl md:text-7xl font-bold text-primary opacity-10 mb-2">
-                    {step.number}
-                  </div>
-                  <h3 className="text-2xl font-bold mb-3">{step.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
-                {index < process.length - 1 && (
-                  <div className="hidden md:block absolute top-24 -right-4 w-8 h-0.5 bg-primary opacity-20" />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section id="contact" className="py-20 md:py-32 px-4 sm:px-6 lg:px-8 bg-primary text-primary-foreground">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-balance">
-            Ready to Build Something Great?
-          </h2>
-          <p className="text-lg mb-8 opacity-90 text-balance">
-            Let's explore how DBP can help you create a creative system that drives measurable growth.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-3.5 bg-primary-foreground text-primary font-medium hover:opacity-90 transition-opacity">
-              Schedule a Call
-            </button>
-            <button className="px-8 py-3.5 border-2 border-primary-foreground text-primary-foreground font-medium hover:bg-white/10 transition-colors">
-              View Case Studies
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t border-border bg-muted/20">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <span className="text-xl font-bold text-primary">DBP</span>
-              <p className="text-sm text-muted-foreground mt-2">
-                Creative systems for clarity, consistency, and growth.
+        {/* Work Section */}
+        <section id="work" className="py-20 md:py-32 bg-background border-t border-border">
+          <div className="max-w-6xl mx-auto px-4 md:px-8">
+            <div className="mb-16">
+              <h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance">
+                Recent Work
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl">
+                A selection of projects showcasing strategy, design, and development across various industries and impact areas.
               </p>
             </div>
-            <div>
-              <h4 className="font-semibold mb-4 text-sm">Services</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">Design</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Development</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Strategy</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4 text-sm">Company</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Portfolio</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Blog</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4 text-sm">Connect</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">LinkedIn</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Instagram</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Email</a></li>
-              </ul>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {projects.map((project, idx) => (
+                <ProjectCard key={idx} {...project} />
+              ))}
             </div>
           </div>
-          <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <p>&copy; 2026 DBP Creative Systems. All rights reserved.</p>
-            <div className="flex gap-6">
-              <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
-              <a href="#" className="hover:text-foreground transition-colors">Terms</a>
+        </section>
+
+        {/* Experience Section */}
+        <section id="experience" className="py-20 md:py-32 bg-background border-t border-border">
+          <div className="max-w-6xl mx-auto px-4 md:px-8">
+            <div className="mb-16">
+              <h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance">
+                Experience
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl">
+                14+ years building, leading, and creating across operations, brand strategy, and web development.
+              </p>
+            </div>
+
+            <ExperienceTimeline items={experienceItems} />
+          </div>
+        </section>
+
+        {/* Skills Section */}
+        <section id="skills" className="py-20 md:py-32 bg-background border-t border-border">
+          <div className="max-w-6xl mx-auto px-4 md:px-8">
+            <div className="mb-16">
+              <h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance">
+                Skills & Expertise
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl">
+                A diverse skill set spanning technology, design, operations, and creative strategy.
+              </p>
+            </div>
+
+            <SkillsGrid categories={skillCategories} />
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="py-20 md:py-32 bg-background border-t border-border">
+          <div className="max-w-6xl mx-auto px-4 md:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              <div className="md:col-span-2">
+                <h2 className="text-4xl md:text-6xl font-bold mb-8 text-balance">
+                  About Byron
+                </h2>
+
+                <div className="space-y-6 text-lg text-foreground leading-relaxed">
+                  <p>
+                    I'm a web developer and brand strategist with over 14 years of experience building intentional digital experiences and scaling social enterprises. My background is rooted in the coffee industry, where I directed operations, shaped culture, and built brand strategy for Coffee For Peace.
+                  </p>
+
+                  <p>
+                    Throughout my career, I've worked across disciplines—from leading teams and managing complex operations to designing brand identities and developing web platforms. I believe in intentional design, authentic storytelling, and technology that serves a purpose beyond commerce.
+                  </p>
+
+                  <p>
+                    When I'm not coding or strategizing, I'm usually exploring the intersection of design, culture, and social impact. I'm passionate about mentoring emerging talent and helping mission-driven organizations tell their stories effectively.
+                  </p>
+
+                  <p className="text-muted-foreground italic">
+                    "Craft intentional experiences. No polish required."
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-6">
+                <div className="bg-card border border-border p-6 rounded">
+                  <h4 className="font-bold mb-4 text-foreground">Quick Facts</h4>
+                  <ul className="space-y-3 text-sm text-foreground">
+                    <li className="flex gap-3">
+                      <span className="text-accent">▸</span>
+                      <span>Based in Davao City, PH</span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="text-accent">▸</span>
+                      <span>14+ years in social enterprise</span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="text-accent">▸</span>
+                      <span>Web developer since 2020</span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="text-accent">▸</span>
+                      <span>Coffee enthusiast & explorer</span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="text-accent">▸</span>
+                      <span>Mentors emerging developers</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </footer>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="py-20 md:py-32 bg-background border-t border-border">
+          <div className="max-w-6xl mx-auto px-4 md:px-8">
+            <div className="text-center max-w-2xl mx-auto">
+              <h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance">
+                Let's Work Together
+              </h2>
+
+              <p className="text-lg text-muted-foreground mb-12">
+                I'm always interested in projects that align with my values. Whether you need a website, brand strategy consultation, or someone to help scale your social enterprise—let's talk.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-accent text-accent-foreground hover:bg-accent/90"
+                >
+                  <a href="mailto:hello@byronpantoja.com">
+                    <Mail className="mr-2" size={18} />
+                    Send an Email
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                >
+                  <a href="https://linkedin.com/in/byronpantoja" target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="mr-2" size={18} />
+                    Connect on LinkedIn
+                  </a>
+                </Button>
+              </div>
+
+              <Separator className="my-12" />
+
+              <p className="text-sm text-muted-foreground">
+                Available for freelance projects, consulting, and mentorship opportunities.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
     </div>
   )
 }
