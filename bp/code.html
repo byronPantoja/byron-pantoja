@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BYRON PANTOJA — Digital Studio</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=DM+Serif+Display:ital@0;1&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-background": "#e7e5e4",
+              "surface-tint": "#cac6bf",
+              "secondary": "#b59a75",
+              "primary-fixed": "#e6e2db",
+              "on-primary-container": "#d4d0c9",
+              "on-secondary": "#2d1d03",
+              "background": "#0e0e0e",
+              "inverse-surface": "#fcf9f8",
+              "on-tertiary": "#5f5f5b",
+              "on-error-container": "#ff9b82",
+              "on-error": "#450900",
+              "tertiary-dim": "#e6e5df",
+              "tertiary-container": "#ecebe5",
+              "on-primary-fixed-variant": "#5d5b56",
+              "surface-variant": "#252626",
+              "tertiary-fixed-dim": "#e6e5df",
+              "on-primary-fixed": "#413f3a",
+              "surface-container-lowest": "#000000",
+              "surface-container-high": "#1f2020",
+              "on-surface-variant": "#acabaa",
+              "surface-bright": "#2c2c2c",
+              "surface-container-low": "#131313",
+              "on-surface": "#e7e5e4",
+              "secondary-container": "#4b381b",
+              "primary": "#cac6bf",
+              "surface-container": "#191a1a",
+              "on-secondary-fixed": "#503c1e",
+              "error-dim": "#ba573f",
+              "primary-fixed-dim": "#d8d4cd",
+              "outline-variant": "#484848",
+              "outline": "#767575",
+              "tertiary": "#fbf9f3",
+              "inverse-on-surface": "#565555",
+              "on-secondary-container": "#d8bb94",
+              "on-secondary-fixed-variant": "#6e5838",
+              "on-tertiary-fixed-variant": "#666662",
+              "on-primary": "#41403b",
+              "error-container": "#7e2b17",
+              "error": "#ed7f64",
+              "primary-container": "#484742",
+              "on-tertiary-container": "#565753",
+              "surface": "#0e0e0e",
+              "inverse-primary": "#615f59",
+              "secondary-fixed-dim": "#eed0a7",
+              "secondary-fixed": "#fddeb5",
+              "primary-dim": "#bcb8b2",
+              "tertiary-fixed": "#f5f4ee",
+              "secondary-dim": "#b59a75",
+              "surface-container-highest": "#252626",
+              "surface-dim": "#0e0e0e",
+              "on-tertiary-fixed": "#494a46"
+            },
+            fontFamily: {
+              "artist": ["DM Serif Display", "serif"],
+              "narrator": ["DM Sans", "sans-serif"],
+              "engineer": ["JetBrains Mono", "monospace"]
+            },
+            borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>body {
+    background-color: #0c0c0c;
+    cursor: crosshair
+    }
+.noise-overlay {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuD7m7fUoB70bDHDXOyvMdAUKnvUstLnxZd64m0s9aiirYxdIyauB01EnbaJfpNnUiKDBhVTrvm-Uy1As3j1p3xTOnWMapNHrjU_n7hMPqx070CO7NkaP0gj0wf9P7PBVf50J7kEFF0Mw5bhNtc6SfZhpFvWC-yGFKNPjP3bXhPndQ5gml-8pCuOh4M6ZHNnORcJw8ydZFoKzdPbJPl6hi0YQ_7RGhiP9niDgccKaHK1OzsFhxhcIvO2R8aSE-ZAEJXvYaDeyaAuSSg);
+    opacity: 0.03
+    }
+.grid-lines {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    opacity: 0.04
+    }
+.grid-line {
+    border-right: 1px solid #F5F5F0;
+    height: 100vh
+    }
+.text-italic-mix i {
+    font-style: italic;
+    font-family: "DM Serif Display", serif
+    }
+.project-image {
+    filter: brightness(0.9) contrast(1.05);
+    transition: filter 0.5s ease
+    }
+.project-image:hover {
+    filter: brightness(1) contrast(1)
+    }
+.vertical-scroll-line {
+    width: 1px;
+    height: 100px;
+    background: linear-gradient(to bottom, #F5F5F0, transparent)
+    }</style>
+</head>
+<body class="font-narrator text-on-surface selection:bg-secondary selection:text-on-secondary">
+<!-- Texture & Grid -->
+<div class="noise-overlay"></div>
+<div class="grid-lines">
+<div class="grid-line"></div>
+<div class="grid-line"></div>
+<div class="grid-line"></div>
+<div class="grid-line"></div>
+<div class="grid-line"></div>
+</div>
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-transparent backdrop-blur-md flex justify-between items-center px-6 md:px-12 py-6 w-full">
+<div class="font-engineer font-bold tracking-[0.2em] text-[#F5F5F0] text-sm md:text-base uppercase">BYRON PANTOJA</div>
+<div class="flex items-center gap-8">
+<div class="hidden md:flex gap-10 font-engineer text-[0.7rem] tracking-[0.15em]">
+<a class="text-[#C4A882] font-bold border-b border-[#C4A882] transition-colors duration-300" href="#work">WORK</a>
+<a class="text-[#F5F5F0] font-medium hover:text-[#C4A882] transition-colors duration-300" href="#about">ABOUT</a>
+<a class="text-[#F5F5F0] font-medium hover:text-[#C4A882] transition-colors duration-300" href="#contact">CONTACT</a>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-engineer text-[0.65rem] tracking-widest text-on-surface-variant uppercase">AVAILABLE</span>
+</div>
+</div>
+</nav>
+<main>
+<!-- Section 1: Hero -->
+<section class="min-height-[1024px] pt-48 pb-32 px-6 md:px-12 grid grid-cols-5 relative">
+<div class="col-span-5 md:col-span-4 lg:col-span-3">
+<h1 class="font-artist text-5xl md:text-7xl lg:text-8xl leading-[1.1] mb-12 text-on-surface">
+                    I turn complex technical things <span class="italic text-secondary">into tools people actually use.</span>
+</h1>
+<div class="font-engineer text-xs md:text-sm tracking-[0.2em] text-on-surface-variant mb-12 flex flex-wrap gap-x-6 gap-y-2 uppercase">
+<span>NextJS</span>
+<span>/</span>
+<span>React</span>
+<span>/</span>
+<span>Tailwind CSS</span>
+<span>/</span>
+<span>Shopify</span>
+<span>/</span>
+<span>Supabase</span>
+</div>
+<p class="font-narrator text-lg md:text-xl text-on-surface-variant max-w-xl leading-relaxed">
+                    Byron is a full-stack engineer focused on the intersection of aesthetic precision and high-performance engineering.
+                </p>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col items-end justify-center">
+<div class="flex flex-col items-center gap-6">
+<span class="font-engineer text-[0.6rem] vertical-rl rotate-180 tracking-[0.3em] uppercase opacity-40">SCROLL TO EXPLORE</span>
+<div class="vertical-scroll-line"></div>
+</div>
+</div>
+</section>
+<!-- Section 2: Work -->
+<section class="py-32 px-6 md:px-12 bg-surface-container-lowest" id="work">
+<div class="flex justify-between items-end mb-24 border-b border-outline-variant/20 pb-8">
+<h2 class="font-engineer text-xs tracking-[0.4em] text-secondary uppercase">01 — SELECTED WORK</h2>
+<span class="font-artist italic text-2xl text-on-surface-variant">Selected Projects</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-y-32">
+<!-- Project 1 -->
+<div class="md:col-span-3 space-y-8">
+<div class="aspect-video bg-surface overflow-hidden group cursor-pointer">
+<img class="w-full h-full object-cover project-image scale-105 group-hover:scale-100 duration-1000" data-alt="minimalist architecture interior with concrete walls and soft daylight coming from high windows editorial photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAPB_lF-sg2wienC63449WRJGghA9jUIk-W3Hv0PuV1Xq3tnDXuCFUNNRShujNsB05Bmltlsmldsmrw_9mogId01w_c1bwxSC0dT5cCmBXit2iOraQc9iVJECwekuaEnHxmvu2tc2NcNeL9AKa8zXFBkpiStga4kq5oBhBF4VayKvmPk-HhiXFiLb2uJi16Vj42st2ms2NHjpwi0GmTrfYcb2nCp7k7cu6OhBu05veXUq4oUGZng03udaTAEFtp9Eaubhqeq3P97g"/>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<div class="col-span-2">
+<h3 class="font-artist text-3xl mb-4">Serenity Studio</h3>
+<p class="font-narrator text-on-surface-variant leading-relaxed">Multi-page wellness studio site built with a focus on immersive typography and seamless transitions.</p>
+</div>
+<div class="text-right">
+<span class="font-engineer text-[0.65rem] text-secondary block mb-1 uppercase">STACK</span>
+<span class="font-engineer text-[0.65rem] text-on-surface-variant block uppercase leading-tight">NextJS / Tailwind / TS</span>
+</div>
+</div>
+</div>
+<!-- Project 2 (Asymmetric shift) -->
+<div class="md:col-start-3 md:col-span-3 space-y-8">
+<div class="aspect-[4/5] bg-surface overflow-hidden group cursor-pointer">
+<img class="w-full h-full object-cover project-image scale-105 group-hover:scale-100 duration-1000" data-alt="high end boutique interior with focused spotlighting on luxury fashion items and dark marble textures editorial style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa5Dvu9kG7lyokL5FZMdKpx65zGNBTAAUD7Hrqf3ZymW-NgKdvh4qSPEbSE0_OqQTyFlpbjr6SU1P-KhCXhW5oH8WF94913zbDzwCtVwevEDrdMwL6KbI9DDKebgLpphjtgrEWcMVSbBmbheKOp0E4OF09-fU30ldzjCVH8FrONMGZ0UsKgazZYzfaS6-XUV4iR0KIM5hrHgZAxUpDeQo-cv0OL2myITKREc9JLkGakRmqT6inj8Hzn7arSUXsFcjXNQ7xGp258Dw"/>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<div class="col-span-2">
+<h3 class="font-artist text-3xl mb-4">That's G.</h3>
+<p class="font-narrator text-on-surface-variant leading-relaxed">Headless Shopify Storefront designed for a luxury streetwear brand using GraphQL for real-time inventory.</p>
+</div>
+<div class="text-right">
+<span class="font-engineer text-[0.65rem] text-secondary block mb-1 uppercase">STACK</span>
+<span class="font-engineer text-[0.65rem] text-on-surface-variant block uppercase leading-tight">NextJS / Shopify / GQL</span>
+</div>
+</div>
+</div>
+<!-- Project 3 -->
+<div class="md:col-span-3 space-y-8">
+<div class="aspect-video bg-surface overflow-hidden group cursor-pointer">
+<img class="w-full h-full object-cover project-image scale-105 group-hover:scale-100 duration-1000" data-alt="clean user interface dashboard on a sleek monitor with minimalist charts and dark mode aesthetic studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCodDrG8PKEMFG5quvfO9QIqAofnItCDV8phrNv7E28Pp7ERFFrQEx2gOfOYfKjKBOCrkh2JZuFJR_ZN93EW7DKBV8od33x-fzx50DM3qFGDfe92GZHKn0_afL42lU1iUUQ3UYpOkk5clK6G_VMv4QNaXOBVxpnVfnAKJHIZw2Qe9AIZ0p661sZftGDgW1yn4mURPGnWFq9TMbVB9YNUGxeXs76Jp5QkD3ZWAKY7HHUq8PjWIAddhIZ8FILjdqY7wuisl8UKtAt0jY"/>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<div class="col-span-2">
+<h3 class="font-artist text-3xl mb-4">BaseLine</h3>
+<p class="font-narrator text-on-surface-variant leading-relaxed">Full-Stack Operations Dashboard for logistics management, featuring deep Supabase integration.</p>
+</div>
+<div class="text-right">
+<span class="font-engineer text-[0.65rem] text-secondary block mb-1 uppercase">STACK</span>
+<span class="font-engineer text-[0.65rem] text-on-surface-variant block uppercase leading-tight">NextJS / Supabase / PG</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: About -->
+<section class="py-48 px-6 md:px-12 grid grid-cols-5 items-center" id="about">
+<div class="col-span-5 md:col-span-2 mb-16 md:mb-0">
+<div class="aspect-[3/4] overflow-hidden grayscale contrast-125">
+<img class="w-full h-full object-cover" data-alt="close-up portrait of a thoughtful man in a dark turtleneck looking away from camera cinematic soft lighting dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnaN8FNed1X6KAGQH7wHxdK2mV1KfTxN-iP68KF40YkoCqGUAjAbU9DGk9PpBzJYJ-AozIzT63uA6yaniUJ0YgH3CIvHWlF8AeM51ON7W-wKbER3mz_7F5MaQIhH--tUsQzZEssUQ_zVi7ZKFhc0BFoneRlH1VdIGMtDkFhEtZsWAMA-89NS9l50H2NOLOEqMHXQyyjzqZleRKn9Op5pF1WtkXDlLRhHYOHXY3JqGU-Xpp5Y3kSoWik4puOr5fogTehMJI7faOX_w"/>
+</div>
+</div>
+<div class="col-span-5 md:col-span-3 md:pl-24">
+<h2 class="font-engineer text-xs tracking-[0.4em] text-secondary mb-12 uppercase">02 — ABOUT</h2>
+<h3 class="font-artist text-4xl md:text-5xl lg:text-6xl leading-tight mb-12">
+                    I learn technical things <span class="italic">fast</span>, then make them understandable for everyone else.
+                </h3>
+<p class="font-narrator text-lg text-on-surface-variant leading-relaxed mb-16">
+                    With over 14 years of experience navigating the complex technical and operational landscapes at Coffee For Peace, I've mastered the art of simplifying the complex. I build digital products that feel intuitive, not intimidating.
+                </p>
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-6">
+<div class="w-px h-12 bg-outline-variant"></div>
+<span class="font-engineer text-xs tracking-[0.2em] uppercase">SYSTEM ARCHITECTURE</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-px h-12 bg-outline-variant"></div>
+<span class="font-engineer text-xs tracking-[0.2em] uppercase">UX STRATEGY</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-px h-12 bg-outline-variant"></div>
+<span class="font-engineer text-xs tracking-[0.2em] uppercase">FRONTEND PERFORMANCE</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Approach -->
+<section class="py-32 px-6 md:px-12 bg-surface-container-low border-y border-outline-variant/10">
+<div class="flex justify-between items-end mb-24">
+<h2 class="font-engineer text-xs tracking-[0.4em] text-secondary uppercase">03 — HOW I WORK</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-24">
+<div class="space-y-6">
+<span class="font-artist italic text-5xl text-secondary">01</span>
+<h4 class="font-engineer text-sm tracking-widest uppercase">Plan</h4>
+<p class="font-narrator text-on-surface-variant text-sm leading-relaxed">Analyzing requirements and defining the core architectural blueprint before a single line of code is written.</p>
+</div>
+<div class="space-y-6">
+<span class="font-artist italic text-5xl text-secondary">02</span>
+<h4 class="font-engineer text-sm tracking-widest uppercase">Build</h4>
+<p class="font-narrator text-on-surface-variant text-sm leading-relaxed">Translating design and logic into high-performance React components with meticulous attention to detail.</p>
+</div>
+<div class="space-y-6">
+<span class="font-artist italic text-5xl text-secondary">03</span>
+<h4 class="font-engineer text-sm tracking-widest uppercase">Ship</h4>
+<p class="font-narrator text-on-surface-variant text-sm leading-relaxed">Deploying optimized, production-ready applications that are scalable, accessible, and fast.</p>
+</div>
+</div>
+</section>
+<!-- Section 5: Contact -->
+<section class="pt-48 pb-32 px-6 md:px-12 text-center" id="contact">
+<h2 class="font-engineer text-xs tracking-[0.4em] text-secondary mb-12 uppercase">04 — LET'S WORK TOGETHER</h2>
+<h3 class="font-artist text-5xl md:text-7xl lg:text-8xl mb-16 max-w-5xl mx-auto leading-tight">
+                Available <span class="italic">for</span> remote work.
+            </h3>
+<div class="flex flex-col items-center gap-12">
+<a class="font-narrator text-2xl md:text-3xl border-b-2 border-secondary/30 hover:border-secondary transition-colors duration-500 pb-2" href="mailto:byronpantoja@gmail.com">
+                    byronpantoja@gmail.com
+                </a>
+<button class="bg-secondary text-on-secondary px-12 py-5 font-engineer text-xs tracking-[0.3em] uppercase hover:bg-on-surface hover:text-background transition-all duration-300">
+                    GET IN TOUCH
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#0C0C0C] w-full py-12 px-6 md:px-12 border-t border-[#191A1A] flex flex-col md:flex-row justify-between items-center w-full gap-8">
+<div class="font-engineer text-[0.75rem] uppercase tracking-[0.15em] text-[#F5F5F0]">© 2024 BYRON PANTOJA studio.</div>
+<div class="flex gap-12">
+<a class="font-engineer text-[0.75rem] uppercase tracking-[0.15em] text-[#F5F5F0]/60 hover:text-[#C4A882] transition-opacity" href="#">LINKEDIN</a>
+<a class="font-engineer text-[0.75rem] uppercase tracking-[0.15em] text-[#F5F5F0]/60 hover:text-[#C4A882] transition-opacity" href="#">GITHUB</a>
+</div>
+<div class="flex gap-6 font-engineer text-[0.6rem] tracking-[0.15em] text-[#F5F5F0]/40">
+<span>React</span>
+<span>Tailwind</span>
+<span>Framer Motion</span>
+</div>
+</footer>
+</body></html>

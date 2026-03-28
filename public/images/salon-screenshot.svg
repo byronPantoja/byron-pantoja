@@ -1,0 +1,20 @@
+<svg width="1200" height="675" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="675" fill="#161616"/>
+  <rect x="40" y="30" width="1120" height="50" rx="0" fill="#1E1E1E"/>
+  <rect x="60" y="45" width="80" height="20" rx="0" fill="#2A2A2A"/>
+  <rect x="900" y="45" width="50" height="20" rx="0" fill="#2A2A2A"/>
+  <rect x="960" y="45" width="50" height="20" rx="0" fill="#2A2A2A"/>
+  <rect x="1020" y="45" width="80" height="20" rx="0" fill="#C4A882"/>
+  <rect x="40" y="100" width="550" height="450" rx="0" fill="#1E1E1E"/>
+  <rect x="60" y="120" width="200" height="14" rx="0" fill="#8A8A85"/>
+  <rect x="60" y="150" width="400" height="40" rx="0" fill="#F5F5F0" opacity="0.1"/>
+  <rect x="60" y="210" width="350" height="10" rx="0" fill="#8A8A85" opacity="0.3"/>
+  <rect x="60" y="230" width="380" height="10" rx="0" fill="#8A8A85" opacity="0.3"/>
+  <rect x="60" y="250" width="300" height="10" rx="0" fill="#8A8A85" opacity="0.3"/>
+  <rect x="60" y="290" width="120" height="36" rx="0" fill="#C4A882"/>
+  <rect x="610" y="100" width="550" height="450" rx="0" fill="#1E1E1E"/>
+  <rect x="630" y="120" width="510" height="300" rx="0" fill="#252525"/>
+  <circle cx="885" cy="270" r="40" fill="#C4A882" opacity="0.2"/>
+  <rect x="40" y="570" width="1120" height="80" rx="0" fill="#1E1E1E"/>
+  <text x="600" y="620" text-anchor="middle" fill="#8A8A85" font-family="monospace" font-size="14" opacity="0.6">Serenity Studio — Wellness Booking Site</text>
+</svg>

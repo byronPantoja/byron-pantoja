@@ -1,21 +1,49 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { DM_Serif_Display, DM_Sans, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-geist-sans' })
-const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' })
+const dmSerifDisplay = DM_Serif_Display({
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-dm-serif-display',
+  display: 'swap',
+})
+
+const dmSans = DM_Sans({
+  weight: ['400', '500'],
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
+  display: 'swap',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  weight: ['400'],
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: 'Byron Pantoja | Web Developer & Brand Strategist',
-  description: 'Portfolio of Byron Pantoja. 14+ years at Coffee For Peace, freelance web development, brand strategy, and creative direction.',
-  keywords: ['web development', 'brand strategy', 'coffee', 'design', 'creative'],
+  title: 'Byron Pantoja — NextJS Developer',
+  description:
+    'I turn complex technical things into tools non-technical people actually use. NextJS, React, Tailwind CSS developer available for remote work.',
+  keywords: [
+    'NextJS developer',
+    'React developer',
+    'Tailwind CSS',
+    'web developer Philippines',
+    'remote developer',
+    'Shopify developer',
+    'Supabase',
+  ],
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
+    title: 'Byron Pantoja — NextJS Developer',
+    description:
+      'Web developer based in Davao, Philippines. Portfolio featuring NextJS + Shopify + Supabase projects.',
     url: 'https://byronpantoja.com',
-    title: 'Byron Pantoja | Portfolio',
-    description: 'Web Developer & Brand Strategist with 14+ years of experience',
+    type: 'website',
   },
   icons: {
     icon: [
@@ -34,8 +62,21 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
-      <body className="font-sans antialiased">
+    <html
+      lang="en"
+      className={`${dmSerifDisplay.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
+    >
+      <body>
+        {/* Noise overlay */}
+        <div className="noise-overlay" aria-hidden="true" />
+        {/* Grid lines */}
+        <div className="grid-lines" aria-hidden="true">
+          <div className="grid-line" />
+          <div className="grid-line" />
+          <div className="grid-line" />
+          <div className="grid-line" />
+          <div className="grid-line" />
+        </div>
         {children}
         <Analytics />
       </body>

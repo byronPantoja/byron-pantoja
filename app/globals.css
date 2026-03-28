@@ -1,145 +1,253 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Byron's Palette: Off-Black, Warm White, Concrete Grey, Hunting Orange */
-  --background: #F5F2ED;
-  --foreground: #1A1A1A;
-  --card: #FFFFFF;
-  --card-foreground: #1A1A1A;
-  --popover: #FFFFFF;
-  --popover-foreground: #1A1A1A;
-  --primary: #1A1A1A;
-  --primary-foreground: #F5F2ED;
-  --secondary: #4A4A4A;
-  --secondary-foreground: #F5F2ED;
-  --muted: #E8E5DF;
-  --muted-foreground: #6B6B6B;
-  --accent: #FF6B35;
-  --accent-foreground: #FFFFFF;
-  --destructive: #DC2626;
-  --destructive-foreground: #FFFFFF;
-  --border: #E8E5DF;
-  --input: #FFFFFF;
-  --ring: #1A1A1A;
-  --chart-1: #FF6B35;
-  --chart-2: #4A4A4A;
-  --chart-3: #6B6B6B;
-  --chart-4: #1A1A1A;
-  --chart-5: #8B8B8B;
-  --radius: 0.375rem;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #1A1A1A;
-  --sidebar-primary: #1A1A1A;
-  --sidebar-primary-foreground: #F5F2ED;
-  --sidebar-accent: #FF6B35;
-  --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: #E8E5DF;
-  --sidebar-ring: #1A1A1A;
-  /* Film Grain texture overlay */
-  --grain-opacity: 0.03;
+  /* Editorial Dark Palette */
+  --background: #0C0C0C;
+  --surface: #161616;
+  --surface-hover: #1E1E1E;
+  --text-main: #F5F5F0;
+  --text-muted: #8A8A85;
+  --accent: #E8E4DD;
+  --border-color: rgba(245, 245, 240, 0.08);
+  --highlight: #C4A882;
+  --radius: 0px;
+
+  /* Font families */
+  --font-artist: var(--font-dm-serif-display), 'DM Serif Display', Georgia, serif;
+  --font-narrator: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
+  --font-engineer: var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace;
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans), 'Geist Fallback', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), 'Geist Mono Fallback', ui-monospace, monospace;
+  --font-sans: var(--font-narrator);
+  --font-serif: var(--font-artist);
+  --font-mono: var(--font-engineer);
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
+  --color-foreground: var(--text-main);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
   --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-border: var(--border-color);
+  --color-highlight: var(--highlight);
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+    box-sizing: border-box;
   }
-  
+
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--text-main);
+    font-family: var(--font-narrator);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     position: relative;
+    overflow-x: hidden;
   }
-  
-  /* Film grain texture overlay */
-  @supports (background-image: url('data:image/svg+xml')) {
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-      opacity: var(--grain-opacity);
-      background-image: 
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' seed='2' /%3E%3C/filter%3E%3Crect width='200' height='200' fill='%231a1a1a' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      background-size: 200px 200px;
-      background-repeat: repeat;
-      z-index: 9999;
-    }
+
+  ::selection {
+    background-color: var(--highlight);
+    color: var(--background);
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
-    @apply font-sans font-bold text-balance;
+    font-family: var(--font-artist);
+    font-weight: 400;
+    text-wrap: balance;
   }
-  
+
   p {
     @apply leading-relaxed;
   }
 }
 
-/* Utility classes for design system */
-.text-muted {
-  @apply text-muted-foreground;
+/* ========================================
+   Noise Overlay — fixed SVG fractal noise
+   ======================================== */
+.noise-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' seed='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' fill='%23808080' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  background-repeat: repeat;
 }
 
-.text-secondary {
-  @apply text-secondary-foreground;
+/* ========================================
+   Grid Lines — 5 vertical architectural lines
+   ======================================== */
+.grid-lines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
-.cta-accent {
-  @apply bg-accent text-accent-foreground hover:bg-accent/90;
+.grid-line {
+  border-right: 1px solid rgba(245, 245, 240, 0.04);
+  height: 100%;
 }
 
-/* High contrast for readability */
-.text-primary {
-  @apply text-primary;
+.grid-line:last-child {
+  border-right: none;
 }
 
-/* Asymmetric spacing utilities */
-.spacing-asymmetric {
-  @apply p-4 md:p-8 lg:p-12;
+/* ========================================
+   Typography Utilities
+   ======================================== */
+.font-artist {
+  font-family: var(--font-artist);
+}
+
+.font-narrator {
+  font-family: var(--font-narrator);
+}
+
+.font-engineer {
+  font-family: var(--font-engineer);
+}
+
+/* ========================================
+   Project Image Treatment
+   ======================================== */
+.project-image {
+  filter: brightness(0.9) contrast(1.05);
+  transition: filter 0.5s ease, transform 0.6s ease;
+}
+
+.project-image:hover {
+  filter: brightness(1) contrast(1.1);
+}
+
+/* ========================================
+   Scroll Reveal Animations
+   ======================================== */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-reveal-child {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-reveal-child.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Image clip-path reveal */
+.image-reveal {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.8s ease-out;
+}
+
+.image-reveal.revealed {
+  clip-path: inset(0);
+}
+
+/* ========================================
+   Available Dot Pulse
+   ======================================== */
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.3);
+  }
+}
+
+.available-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* ========================================
+   Scroll Indicator Animation
+   ======================================== */
+@keyframes scroll-travel {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.scroll-line {
+  position: relative;
+  width: 1px;
+  height: 40px;
+  background: rgba(245, 245, 240, 0.15);
+}
+
+.scroll-dot {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--text-main);
+  left: -1px;
+  animation: scroll-travel 2s ease-in-out infinite;
+}
+
+/* ========================================
+   Reduced Motion
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .scroll-reveal-child,
+  .image-reveal {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    transition: none;
+  }
+
+  .available-dot {
+    animation: none;
+  }
+
+  .scroll-dot {
+    animation: none;
+  }
+
+  .project-image {
+    transition: none;
+  }
 }
