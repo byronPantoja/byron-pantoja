@@ -23,39 +23,29 @@ export function ContactFooter() {
             <div className="flex flex-col items-center gap-8 md:gap-10">
               {/* Email */}
               <a
-                href="mailto:byronpantoja@gmail.com"
+                href="mailto:itsme@byronpantoja.com"
                 className="font-narrator text-xl md:text-2xl lg:text-3xl text-[#E8E4DD] border-b border-[rgba(245,245,240,0.15)] hover:border-[#C4A882] pb-2 transition-colors duration-500"
               >
-                byronpantoja@gmail.com
+                itsme@byronpantoja.com
               </a>
 
-              {/* Social links */}
-              <div className="flex gap-8">
+              {/* CTA buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 mt-4">
                 <a
-                  href="https://linkedin.com/in/byronpantoja"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-narrator text-sm text-[#8A8A85] hover:text-[#E8E4DD] transition-colors duration-300"
+                  href="mailto:itsme@byronpantoja.com"
+                  className="inline-block bg-[#C4A882] text-[#0C0C0C] px-10 py-4 font-engineer text-xs tracking-[0.25em] uppercase hover:bg-[#F5F5F0] transition-colors duration-300"
                 >
-                  LinkedIn &rarr;
+                  Send an Email
                 </a>
                 <a
-                  href="https://github.com/byronPantoja"
+                  href="https://mockup-dashboard-baseline.vercel.app"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-narrator text-sm text-[#8A8A85] hover:text-[#E8E4DD] transition-colors duration-300"
+                  className="inline-block border border-[rgba(245,245,240,0.15)] text-[#E8E4DD] px-10 py-4 font-engineer text-xs tracking-[0.25em] uppercase hover:border-[#C4A882] hover:text-[#C4A882] transition-colors duration-300"
                 >
-                  GitHub &rarr;
+                  Contact Form
                 </a>
               </div>
-
-              {/* CTA button */}
-              <a
-                href="mailto:byronpantoja@gmail.com"
-                className="inline-block bg-[#C4A882] text-[#0C0C0C] px-10 py-4 font-engineer text-xs tracking-[0.25em] uppercase hover:bg-[#F5F5F0] transition-colors duration-300 mt-4"
-              >
-                Get in Touch
-              </a>
             </div>
           </ScrollReveal>
         </div>
