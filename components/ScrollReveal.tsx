@@ -26,6 +26,9 @@ export function ScrollReveal({
       const el = ref.current
       if (!el) return
       el.classList.add('revealed')
+      el.querySelectorAll('.image-reveal').forEach((child) =>
+        child.classList.add('revealed')
+      )
       if (staggerChildren) {
         const children = el.querySelectorAll('.scroll-reveal-child')
         children.forEach((child) => child.classList.add('revealed'))
@@ -38,6 +41,9 @@ export function ScrollReveal({
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('revealed')
+            entry.target
+              .querySelectorAll('.image-reveal')
+              .forEach((child) => child.classList.add('revealed'))
 
             if (staggerChildren) {
               const children = entry.target.querySelectorAll(
