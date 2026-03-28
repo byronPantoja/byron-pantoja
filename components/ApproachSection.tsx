@@ -29,7 +29,7 @@ export function ApproachSection() {
         <ScrollReveal>
           <div className="mb-16 md:mb-24">
             <span className="font-engineer text-xs tracking-[0.3em] text-[#8A8A85] uppercase mb-4 block">
-              03 — How I Work
+              04 — How I Work
             </span>
             <h2 className="sr-only">Web Development Process</h2>
             <div className="w-[60px] h-[1px] bg-[rgba(245,245,240,0.15)]" />

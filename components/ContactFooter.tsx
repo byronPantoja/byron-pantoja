@@ -8,7 +8,7 @@ export function ContactFooter() {
         <div className="max-w-[1400px] mx-auto">
           <ScrollReveal>
             <span className="font-engineer text-xs tracking-[0.3em] text-[#8A8A85] uppercase mb-4 block">
-              04 — Let&apos;s Work Together
+              05 — Let&apos;s Work Together
             </span>
             <h2 className="sr-only">Hire a Remote NextJS Developer</h2>
             <div className="w-[60px] h-[1px] bg-[rgba(245,245,240,0.15)] mx-auto mb-12 md:mb-16" />

@@ -1,0 +1,114 @@
+---
+title: "Building a Full-Stack Dashboard with Supabase Auth, Postgres, and Row Level Security"
+description: "How I built BaseLine — an operations dashboard with real authentication, a Postgres backend, Row Level Security, and a live contact-to-lead pipeline — using NextJS and Supabase."
+date: "2026-03-29"
+author: "Byron Pantoja"
+tags: ["nextjs", "supabase", "postgres", "authentication", "dashboard", "full-stack", "row-level-security"]
+image: "/images/dispatch/dashboard-hero.png"
+slug: "full-stack-dashboard-supabase-nextjs"
+---
+
+# Building a Full-Stack Dashboard with Supabase Auth, Postgres, and Row Level Security
+
+The third project in my [portfolio sprint](/dispatch/10-day-portfolio-sprint-plan) was supposed to be a static dashboard mockup with hardcoded data and a charting library. It became something significantly more ambitious — a full-stack application with real authentication, a Postgres database, Row Level Security policies, and a working contact-to-lead pipeline.
+
+**Live site:** [mockup-dashboard-baseline.vercel.app](https://mockup-dashboard-baseline.vercel.app)  
+**Source:** [github.com/byronPantoja/mockup-dashboard](https://github.com/byronPantoja/mockup-dashboard)
+
+## Why I Went Beyond the Original Scope
+
+The original plan called for a static dashboard with metric cards, a Recharts chart, and a sortable data table using hardcoded mock data. That would have been fine for a portfolio piece — it shows you can build application-level UI.
+
+But I realized the dashboard was an opportunity to demonstrate something the other two projects couldn't: **full-stack architecture**. The salon site is frontend-only. The Shopify store integrates with an external API but doesn't own its backend. A dashboard with real auth and a real database shows an employer I can build the complete stack.
+
+So BaseLine became a Supabase application with three distinct layers:
+
+1. **Public dashboard** — demo mode with seed data, accessible to anyone
+2. **Contact form** — writes real submissions to Postgres
+3. **Admin panel** — behind authentication, shows real leads with full CRUD
+
+## The Data Architecture
+
+The key architectural decision was separating seed data from real data at the database level, not the application level.
+
+The `leads` table has an `is_seed` boolean column. Three Row Level Security policies control who sees what:
+
+- **`anon_select_seed`** — anonymous users can only read rows where `is_seed = true`
+- **`anon_insert_contact`** — anonymous users can insert new rows (with `is_seed = false`)
+- **`auth_full_access`** — authenticated users have full CRUD access
+
+This means the public dashboard always loads fast with predictable seed data. The contact form writes real submissions that only appear in the authenticated admin view. And the RLS policies enforce this at the Postgres level — even if someone bypassed the frontend, the database itself would reject unauthorized access.
+
+## Authentication Flow
+
+Supabase Auth handles the login with email/password credentials. The flow:
+
+1. User visits `/login`, enters credentials
+2. Supabase validates and returns a session with cookies
+3. The `proxy.ts` (Next.js 16's renamed middleware) refreshes the auth token on every request
+4. Visiting `/admin` triggers a server-side auth check — unauthenticated users get redirected to `/login`
+5. Authenticated users see the real leads table with live Supabase data
+
+The proxy also prevents authenticated users from seeing the login page — if you're already signed in, you get redirected straight to `/admin`.
+
+## The Admin Leads Table
+
+This is the most complex component in the portfolio. It's an interactive data table featuring:
+
+- **Status cycling** — clicking a status badge cycles through New → Reviewed → Contacted → Archived, persisting each change to Supabase immediately
+- **Unread indicators** — blue pulsing dots on new leads that haven't been reviewed
+- **Expandable rows** — clicking a lead reveals their message and role
+- **Sortable columns** — click column headers to sort by name or date
+- **Status filtering** — filter buttons for All, New, Reviewed, Contacted, Archived
+- **Inline delete** — remove leads with optimistic UI updates and toast confirmations
+
+Every interaction writes to the real Postgres database. This isn't a mockup of a table — it's a working CRM interface.
+
+## The Custom Design System
+
+I built a "Luminous Professional" design system from scratch — no component libraries, no shadcn/ui, no Material UI. The system has a few defining principles:
+
+**Borderless hierarchy.** Instead of using borders to separate elements (the most common pattern in dashboards), I use tonal surface shifts. Cards sit on slightly elevated surfaces with ambient shadows. The hierarchy comes from color depth, not lines.
+
+**CSS custom properties everywhere.** Every color, shadow, and spacing value is a design token consumed through Tailwind's `@theme` directive. Changing the accent color updates the entire interface.
+
+**Gradient accents.** Subtle gradients on the metric card icons and the CTA button add warmth to what could be a cold, clinical interface.
+
+## The Contact-to-Lead Pipeline
+
+Here's the full flow that an employer can test themselves:
+
+1. Visit the public dashboard at the root URL
+2. Click "Contact Me" — a modal appears with a form
+3. Fill in name, email, company, role, and a message
+4. Submit — the form hits `/api/leads`, which validates input and inserts a row into Supabase
+5. Go to `/login`, sign in with admin credentials
+6. The `/admin` page shows the real submission with a "New" status badge
+7. Click the status to cycle it through the review pipeline
+8. Expand the row to read the full message
+
+That's a working business tool. Not a demo. Not a mockup. A functional contact management system.
+
+## What I Learned About AI-Assisted Full-Stack Development
+
+The dashboard pushed my AI workflow the hardest. Frontend scaffolding with Claude is straightforward — you describe a component, Claude writes it, you refine it. Backend architecture is different.
+
+I had to make real decisions about:
+- How to structure the RLS policies (which took several iterations to get right)
+- Whether to use Supabase's server-side auth or client-side auth (server-side, for security)
+- How to handle the proxy.ts cookie synchronization (Next.js 16 specific)
+- Whether the admin query should include or exclude seed data (exclude by default, with a toggle option)
+
+Claude helped with the implementation of each decision, but the decisions themselves required understanding the tradeoffs. AI-assisted development isn't about delegating architecture — it's about accelerating execution once the architecture is clear.
+
+## Key Takeaway for Portfolio Builders
+
+If you're building a dashboard for your portfolio, the minimum viable demo is a static page with a charting library and hardcoded data. That's fine — it shows you can build UI.
+
+But if you can add real auth and a real database, you jump into a completely different tier. An employer looking at your portfolio sees the difference between "this person can arrange components" and "this person can build systems." Supabase makes this accessible — you can set up Postgres, auth, and RLS in an afternoon.
+
+The dashboard is the capstone of my portfolio for a reason. It's the project that proves depth.
+
+---
+
+*This is Part 4 of a 4-part series on building a web developer portfolio with AI-assisted development. Read the full series: [The Plan](/dispatch/10-day-portfolio-sprint-plan) · [Salon](/dispatch/building-salon-landing-page-nextjs) · [Shopify Store](/dispatch/headless-shopify-storefront-nextjs) · Dashboard (this post).*

@@ -1,0 +1,104 @@
+---
+title: "Building a Headless Shopify Storefront with NextJS and the Storefront API"
+description: "A step-by-step walkthrough of building That's G — a headless e-commerce storefront using NextJS 14, the Shopify Storefront API (GraphQL), and an editorial design language inspired by Symbol Audio."
+date: "2026-03-29"
+author: "Byron Pantoja"
+tags: ["nextjs", "shopify", "storefront-api", "graphql", "headless-commerce", "tailwind-css"]
+image: "/images/dispatch/store-hero.png"
+slug: "headless-shopify-storefront-nextjs"
+---
+
+# Building a Headless Shopify Storefront with NextJS and the Storefront API
+
+The second project in my [portfolio sprint](/dispatch/10-day-portfolio-sprint-plan) was the most technically impressive — a NextJS storefront pulling live product data from a Shopify development store via GraphQL. No hardcoded products. No mock data. Real API integration with real product images, prices, variants, and collections.
+
+**Live site:** [mockup-store-thatsg.vercel.app](https://mockup-store-thatsg.vercel.app)  
+**Source:** [github.com/byronPantoja/mockup-store](https://github.com/byronPantoja/mockup-store)
+
+## Why Headless Shopify Matters for Portfolio Projects
+
+Most developer portfolios show static mockups. The Shopify storefront does something fundamentally different — it proves you can **integrate with a real production API**. When an employer clicks through the product pages and sees live data with variant pricing, they immediately understand this isn't a template. Adding a product in the Shopify admin instantly reflects on the storefront.
+
+For anyone targeting e-commerce development roles (which is a massive segment of remote work on platforms like OnlineJobs.ph), this is the project that closes the deal.
+
+## The Architecture
+
+The system uses two Shopify APIs:
+
+**Admin API** — for seeding the store. I wrote a script that created 8 products across 3 collections (Coffee Beans, Merchandise, Gift Sets) with variants, pricing, descriptions, and images. This runs once during setup and isn't part of the deployed application.
+
+**Storefront API** — for the frontend. The NextJS app makes GraphQL queries to fetch products, collections, and individual product details. This is a public, read-only API designed for exactly this use case.
+
+The Storefront API client is surprisingly simple:
+
+```typescript
+export async function shopifyFetch({ query, variables }) {
+  const res = await fetch(
+    `https://${domain}/api/2025-01/graphql.json`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Storefront-Access-Token': storefrontToken,
+      },
+      body: JSON.stringify({ query, variables }),
+    }
+  );
+  return res.json();
+}
+```
+
+No Shopify SDK. No Hydrogen framework. Just native `fetch` with GraphQL queries. This keeps the bundle small and the architecture transparent.
+
+## The Design Direction
+
+I studied [Symbol Audio](https://symbolaudio.com) — a furniture company whose website uses warm cream backgrounds, bold serif typography, asymmetric editorial layouts, and full-bleed product photography. I adapted that aesthetic for a coffee brand:
+
+- Warm cream palette with deep maroon and blue contrast sections
+- DM Serif Display for massive lowercase headings
+- Asymmetric grids alternating between large lifestyle images and product shots
+- Sharp-cornered buttons (no border-radius) for the editorial feel
+- The page scrolls through distinct visual "chapters" — each section has its own background color and layout rhythm
+
+The brand name "That's G" appears as the primary mark everywhere visible. "Coffee Roastery" only shows in the footer and legal copy — a deliberate branding hierarchy decision.
+
+## Cart State Management
+
+The cart is managed entirely on the frontend using React Context with `useReducer`:
+
+```typescript
+type CartAction =
+  | { type: 'ADD_ITEM'; payload: CartItem }
+  | { type: 'REMOVE_ITEM'; payload: string }
+  | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } };
+```
+
+Adding an item, updating quantities, and removing items all dispatch through the reducer. Derived values (cart total, item count) are computed from the items array. The cart persists across client-side navigation through the context provider wrapping the app.
+
+The cart drawer slides in from the right with a dark overlay, shows line items with quantity controls, and has a "Checkout" button that displays a "This is a portfolio mockup" message. Honest and clear.
+
+## The Variant Selector
+
+Products with multiple variants (like coffee bags in 250g, 500g, and 1kg) render a selector with bordered boxes — not a dropdown. Clicking a variant updates the displayed price and ensures the correct variant ID is sent with the Add to Cart action. This is a small detail that shows employers you understand e-commerce UX patterns.
+
+## What I'd Do Differently
+
+If this were a real client project, I'd add Shopify's checkout integration so the "Checkout" button creates a real Shopify checkout session. I'd also implement `next/image` with Shopify's CDN more aggressively for image optimization, and add product search functionality.
+
+For the portfolio, none of that was necessary. The GraphQL integration, cart state management, dynamic routing, and collection filtering already prove the technical capabilities an employer needs to see.
+
+## Setup Guide for Other Developers
+
+If you want to build something similar:
+
+1. Create a Shopify Partner account and a development store (free)
+2. Create a custom app in the Shopify admin with Storefront API access
+3. Copy your Storefront API access token to `.env.local`
+4. Build your GraphQL queries for products, collections, and single products
+5. The Storefront API has no rate limits for normal usage — it scales automatically
+
+The entire Shopify setup takes about 10 minutes. The product seeding (if you use the Admin API) takes another 30 minutes. The frontend build is where you spend the real time.
+
+---
+
+*This is Part 3 of a 4-part series. Next: [Building a Full-Stack Dashboard with Supabase Auth and Postgres](/dispatch/full-stack-dashboard-supabase-nextjs).*

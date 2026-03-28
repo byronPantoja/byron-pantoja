@@ -2,6 +2,7 @@ import { Navbar } from '@/components/Navbar'
 import { Hero } from '@/components/Hero'
 import { WorkSection } from '@/components/WorkSection'
 import { AboutSection } from '@/components/AboutSection'
+import { DispatchSection } from '@/components/DispatchSection'
 import { ApproachSection } from '@/components/ApproachSection'
 import { ContactFooter } from '@/components/ContactFooter'
 
@@ -67,6 +68,7 @@ export default function Home() {
         <Hero />
         <WorkSection />
         <AboutSection />
+        <DispatchSection />
         <ApproachSection />
         <ContactFooter />
       </main>
