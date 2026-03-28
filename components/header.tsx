@@ -1,12 +1,32 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+
+      // Scroll down -> hide, Scroll up -> show
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        setIsVisible(false)
+      } else {
+        setIsVisible(true)
+      }
+
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [lastScrollY])
 
   const navItems = [
     { href: '/work', label: 'Work' },
@@ -16,7 +36,10 @@ export function Header() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-border">
+    <header
+      className={`sticky top-0 z-50 bg-background border-b border-border transition-transform duration-300 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full'
+        }`}
+    >
       <nav className="max-w-6xl mx-auto px-4 md:px-8 py-6 flex items-center justify-between">
         <Link href="/" className="font-sans font-bold text-xl tracking-tight">
           Byron Pantoja

@@ -23,7 +23,7 @@ const projects: Project[] = [
     tags: ['NextJS', 'Tailwind CSS', 'TypeScript'],
     siteUrl: 'https://mockup-salon.vercel.app',
     githubUrl: 'https://github.com/byronPantoja/mockup-salon',
-    image: '/images/salon-screenshot.svg',
+    image: '/images/salon-screenshot.png',
     imageAlt: 'Serenity Studio — wellness booking site screenshot',
   },
   {
@@ -35,7 +35,7 @@ const projects: Project[] = [
     tags: ['NextJS', 'Shopify API', 'GraphQL', 'Tailwind CSS'],
     siteUrl: 'https://mockup-store-thatsg.vercel.app',
     githubUrl: 'https://github.com/byronPantoja/mockup-store-thatsg',
-    image: '/images/store-screenshot.svg',
+    image: '/images/store-screenshot.png',
     imageAlt: "That's G — headless Shopify storefront screenshot",
   },
   {
@@ -47,7 +47,7 @@ const projects: Project[] = [
     tags: ['NextJS', 'Supabase', 'Postgres', 'Auth', 'Tailwind CSS'],
     siteUrl: 'https://mockup-dashboard-baseline.vercel.app',
     githubUrl: 'https://github.com/byronPantoja/mockup-dashboard-baseline',
-    image: '/images/dashboard-screenshot.svg',
+    image: '/images/dashboard-screenshot.png',
     imageAlt: 'BaseLine — operations dashboard screenshot',
   },
 ]

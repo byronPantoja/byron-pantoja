@@ -1,47 +1,50 @@
-'use client'
-
-import { Button } from '@/components/ui/button'
-import { ArrowRight } from 'lucide-react'
+import { ScrollReveal } from './ScrollReveal'
 
 export function Hero() {
   return (
-    <section className="min-h-[calc(100vh-120px)] flex items-center py-12 md:py-20">
-      <div className="max-w-6xl mx-auto px-4 md:px-8 w-full">
-        <div className="max-w-3xl">
-          {/* Preheading */}
-          <p className="text-accent font-mono text-sm tracking-wide uppercase mb-6">
-            Web Developer & Brand Strategist
-          </p>
-
-          {/* Main heading */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6 text-pretty">
-            Craft intentional digital experiences that resonate.
+    <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 pt-24 pb-16 relative">
+      <div className="max-w-[1400px] mx-auto w-full">
+        <ScrollReveal>
+          {/* Headline */}
+          <h1 className="font-artist text-[2.5rem] md:text-[4rem] lg:text-[5rem] leading-[1.1] mb-10 text-[#F5F5F0] max-w-[900px]">
+            I turn complex technical things{' '}
+            <em className="italic">into tools people actually use.</em>
           </h1>
+        </ScrollReveal>
 
-          {/* Subheading */}
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
-            Over 14 years directing operations and culture at Coffee For Peace. Freelance web development, brand strategy, and creative direction for brands that matter.
-          </p>
+        <ScrollReveal>
+          {/* Tech descriptor */}
+          <div className="font-engineer text-xs md:text-sm tracking-[0.2em] text-[#8A8A85] mb-12 flex flex-wrap gap-x-4 gap-y-2 uppercase">
+            <span>NextJS</span>
+            <span className="text-[rgba(245,245,240,0.2)]">&middot;</span>
+            <span>React</span>
+            <span className="text-[rgba(245,245,240,0.2)]">&middot;</span>
+            <span>Tailwind CSS</span>
+            <span className="text-[rgba(245,245,240,0.2)]">&middot;</span>
+            <span>Shopify</span>
+            <span className="text-[rgba(245,245,240,0.2)]">&middot;</span>
+            <span>Supabase</span>
+          </div>
+        </ScrollReveal>
 
-          {/* CTA */}
-          <div className="flex gap-4 flex-wrap">
-            <Button
-              asChild
-              size="lg"
-              className="bg-accent text-accent-foreground hover:bg-accent/90"
-            >
-              <a href="/work">
-                View Work
-                <ArrowRight className="ml-2" size={18} />
-              </a>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-            >
-              <a href="/contact">Get in touch</a>
-            </Button>
+        {/* Bottom row: bio + scroll indicator */}
+        <div className="flex justify-between items-end">
+          <ScrollReveal className="max-w-md">
+            <p className="font-narrator text-sm md:text-base text-[#8A8A85] leading-relaxed">
+              Web developer based in Davao, Philippines. 14+ years turning brand
+              strategy and operations into digital tools. Currently seeking
+              remote opportunities.
+            </p>
+          </ScrollReveal>
+
+          {/* Scroll indicator — desktop only */}
+          <div className="hidden lg:flex flex-col items-center gap-3">
+            <div className="scroll-line">
+              <div className="scroll-dot" />
+            </div>
+            <span className="font-engineer text-[0.6rem] tracking-[0.2em] text-[#8A8A85] uppercase">
+              Scroll
+            </span>
           </div>
         </div>
       </div>
