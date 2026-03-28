@@ -7,9 +7,10 @@ export function ContactFooter() {
       <section id="contact" className="pt-24 md:pt-40 pb-24 md:pb-32 px-6 md:px-12 text-center">
         <div className="max-w-[1400px] mx-auto">
           <ScrollReveal>
-            <h2 className="font-engineer text-xs tracking-[0.3em] text-[#8A8A85] uppercase mb-4">
+            <span className="font-engineer text-xs tracking-[0.3em] text-[#8A8A85] uppercase mb-4 block">
               04 — Let&apos;s Work Together
-            </h2>
+            </span>
+            <h2 className="sr-only">Hire a Remote NextJS Developer</h2>
             <div className="w-[60px] h-[1px] bg-[rgba(245,245,240,0.15)] mx-auto mb-12 md:mb-16" />
           </ScrollReveal>
 

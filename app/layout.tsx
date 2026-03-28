@@ -26,24 +26,27 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Byron Pantoja — NextJS Developer',
+  metadataBase: new URL('https://byronpantoja.com'),
+  title: 'Byron Pantoja — NextJS Developer | React, Tailwind CSS, Supabase',
   description:
-    'I turn complex technical things into tools non-technical people actually use. NextJS, React, Tailwind CSS developer available for remote work.',
-  keywords: [
-    'NextJS developer',
-    'React developer',
-    'Tailwind CSS',
-    'web developer Philippines',
-    'remote developer',
-    'Shopify developer',
-    'Supabase',
-  ],
+    'NextJS developer based in Davao, Philippines. I build production-ready web applications with React, Tailwind CSS, Shopify, and Supabase. Available for remote work.',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'Byron Pantoja — NextJS Developer',
     description:
-      'Web developer based in Davao, Philippines. Portfolio featuring NextJS + Shopify + Supabase projects.',
+      'I turn complex technical things into tools people actually use. Portfolio featuring NextJS, Shopify, and Supabase projects.',
     url: 'https://byronpantoja.com',
+    siteName: 'Byron Pantoja',
     type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Byron Pantoja — NextJS Developer',
+    description:
+      'NextJS developer building production-ready web applications. Available for remote work.',
   },
   icons: {
     icon: [
@@ -54,6 +57,17 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 }
 
 export default function RootLayout({
@@ -62,10 +76,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${dmSerifDisplay.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
-    >
+    <html lang="en" className={`${dmSerifDisplay.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
       <body>
         {/* Noise overlay */}
         <div className="noise-overlay" aria-hidden="true" />

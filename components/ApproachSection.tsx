@@ -28,9 +28,10 @@ export function ApproachSection() {
         {/* Section label */}
         <ScrollReveal>
           <div className="mb-16 md:mb-24">
-            <h2 className="font-engineer text-xs tracking-[0.3em] text-[#8A8A85] uppercase mb-4">
+            <span className="font-engineer text-xs tracking-[0.3em] text-[#8A8A85] uppercase mb-4 block">
               03 — How I Work
-            </h2>
+            </span>
+            <h2 className="sr-only">Web Development Process</h2>
             <div className="w-[60px] h-[1px] bg-[rgba(245,245,240,0.15)]" />
           </div>
         </ScrollReveal>

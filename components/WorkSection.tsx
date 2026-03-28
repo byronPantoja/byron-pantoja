@@ -80,9 +80,10 @@ export function WorkSection() {
         {/* Section label */}
         <ScrollReveal>
           <div className="mb-20 md:mb-28">
-            <h2 className="font-engineer text-xs tracking-[0.3em] text-[#8A8A85] uppercase mb-4">
+            <span className="font-engineer text-xs tracking-[0.3em] text-[#8A8A85] uppercase mb-4 block">
               01 — Selected Work
-            </h2>
+            </span>
+            <h2 className="sr-only">NextJS Portfolio Projects</h2>
             <div className="w-[60px] h-[1px] bg-[rgba(245,245,240,0.15)]" />
           </div>
         </ScrollReveal>
