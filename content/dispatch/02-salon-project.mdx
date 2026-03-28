@@ -1,68 +1,72 @@
 ---
-title: "Building an Interactive Salon Landing Page with NextJS in One Session"
-description: "How I built Serenity Studio — a multi-page wellness site with an interactive booking calendar, journal articles, and membership page — using NextJS, Tailwind CSS, and AI-assisted development."
-date: "2026-03-29"
+title: "I Built a Multi-Page Salon Website with NextJS in One Session — I Planned for Three Days"
+description: "Day 2 of a portfolio sprint: what was supposed to take 3 days shipped in a single morning. Here's how AI-assisted development with Claude Code compressed my timeline without cutting quality."
+date: "2026-03-26"
 author: "Byron Pantoja"
-tags: ["nextjs", "tailwind-css", "booking-calendar", "react", "web-development"]
+tags: ["nextjs", "tailwind-css", "booking-calendar", "react", "ai-assisted-development"]
 image: "/images/dispatch/salon-hero.png"
 slug: "building-salon-landing-page-nextjs"
 ---
 
-# Building an Interactive Salon Landing Page with NextJS in One Session
+# I Built a Multi-Page Salon Website with NextJS in One Session — I Planned for Three Days
 
-The first project in my [10-day portfolio sprint](/dispatch/10-day-portfolio-sprint-plan) was supposed to take three days. It shipped in one focused session. Here's how I built Serenity Studio — a multi-page wellness studio website with an interactive booking calendar, a journal with full blog articles, and a membership teaser — and what I learned about scope management along the way.
+I need to talk about what just happened.
 
-**Live site:** [mockup-salon.vercel.app](https://mockup-salon.vercel.app)  
+Yesterday I wrote out my [10-day sprint plan](/blog/10-day-portfolio-sprint-plan). Days 1–3 were allocated to building a salon landing page. One page. Hero, services, testimonials, contact form, booking calendar. Three days felt reasonable — maybe even tight.
+
+It's Wednesday, March 26th. The salon site is done. Not just the landing page — the entire multi-page website. Treatments catalog. Journal with three full blog articles. Membership page. Interactive booking calendar. All deployed on Vercel.
+
+It shipped in one focused session.
+
+**Live site:** [mockup-salon.vercel.app](https://mockup-salon.vercel.app)
 **Source:** [github.com/byronPantoja/mockup-salon](https://github.com/byronPantoja/mockup-salon)
 
-## What I Built
+## What Actually Got Built
 
-Serenity Studio is a fictional wellness/salon business site. It's not a single landing page — it's a complete, multi-page website:
+I didn't just build what I planned. The AI workflow moved so fast that I kept adding scope — and it kept landing:
 
-- **Home page** — hero section, four service cards with pricing, about section, testimonial cards, interactive booking calendar, and contact form
-- **/treatments** — a catalog of seven treatments, each with an accordion that expands to reveal an inline booking widget
-- **/journal** — a blog index with three full articles, each on its own dynamic route with complete content
-- **/membership** — a "coming soon" teaser page with email capture
+- **Home page** — full-width hero with lifestyle photography, four service cards with pricing and duration, a two-column about section, three testimonial cards, an interactive booking calendar with date/time selection, and a contact form with validation
+- **/treatments** — seven treatments in an accordion layout, each expanding to reveal an inline booking widget
+- **/journal** — three full wellness articles with dynamic routing, tags, and reading time
+- **/membership** — a "coming soon" teaser with email capture
 
-The booking calendar is the star component. It renders a dynamic month view with clickable dates, time slot selection, and a confirmation flow. It appears on the home page as a standalone section AND inside each treatment's accordion on the treatments page.
+The booking calendar is the component I'm most proud of. It renders a dynamic month view based on the current date, shows clickable dates, displays time slot availability, and has a confirmation flow. It appears both on the home page and inside each treatment accordion on the /treatments page.
 
-## The Technical Decisions
+## How It Happened So Fast
 
-**NextJS 14 with App Router** was the obvious choice — server components for the static pages, client components for interactive elements like the booking calendar and contact form. TypeScript throughout for type safety.
+The Claude Code workflow isn't magic — it's just the right loop executed quickly:
 
-**Tailwind CSS** for styling. I chose a warm, premium palette — soft neutrals, sage green accents, and serif/sans-serif font pairing — to match the wellness industry. The design direction was defined before writing any code.
+**First,** I defined the design direction before touching any code. Warm premium aesthetic — soft neutrals, sage green accents, serif/sans-serif font pairing. I described the full sitemap, the component list, and the vibe. Claude turned that into a component scaffold with all the copy written.
 
-**No backend.** The booking calendar doesn't connect to Mindbody or any scheduling API. The contact form shows a success state but doesn't send emails. This was a deliberate scope decision — the portfolio demonstrates UI capability, not API integration.
+**Second,** I built component-first. ServiceCard, TestimonialCard, BookingCalendar, ContactForm — each one self-contained and reusable. Once the components existed, assembling pages was fast.
 
-## The Component That Matters Most
+**Third,** I ran an audit after deployment. This is where AI shines hardest. I pasted the URL into Claude, it crawled every page, and flagged issues I'd missed:
 
-For anyone building a portfolio, the booking calendar is the kind of component that separates you from other applicants. Here's why:
+- The calendar was hardcoded to November 2024 (16 months in the past)
+- Footer links pointed to `#`
+- Three images were reused across seven treatments
+- No feedback state on form submit
 
-Most landing page mockups are static. They show you can arrange text and images. An interactive calendar with date selection, time slot rendering, and state management shows you can build **application-level UI** — the kind of work employers actually need done.
+I turned the audit into a Claude Code prompt, ran it, and had everything fixed in about an hour.
 
-The calendar uses `useState` to track the selected date and renders time slots conditionally. Clicking a date updates the availability panel. Clicking "Continue" shows a confirmation state. It's not complex code — but the polished result looks like production software.
+## The Scope Decision That Saved the Sprint
 
-## The Audit Process
+Midway through, I started thinking about integrating the Mindbody API — a real scheduling backend for the booking calendar. The API sandbox is free. It would make the mockup feel more "real."
 
-After the initial build, I ran a thorough audit before moving on. This is where AI helped most — I pasted the deployed URL into Claude, and it crawled every page and flagged issues I would have missed:
+Claude pushed back. Hard.
 
-- The booking calendar was hardcoded to November 2024 (16 months in the past)
-- Footer links pointed to `#` instead of real pages
-- Three treatment images were reused across seven treatments
-- The contact form had no feedback state on submit
+The math: Mindbody integration would mean learning OAuth, setting up a developer account, understanding their data model, building the connection layer, and handling edge cases. That's 2-3 days — my entire Shopify store timeline. And the Shopify store already proves API integration. Two projects proving the same skill doesn't help my portfolio.
 
-Each fix was small, but collectively they're the difference between "this person ships clean work" and "this person leaves loose ends." I turned the audit into a Claude Code prompt, ran it, and had everything fixed in about an hour.
+I killed the Mindbody idea and moved on. The mock booking calendar already demonstrates interactive UI capability without a real backend. Scope discipline is everything in a sprint.
 
-## What I'd Do Differently
+## What This Means for the Sprint
 
-If I were building this for a real client (not a portfolio), I'd integrate with a scheduling API like Calendly or Cal.com instead of mocking the booking flow. I'd also add a CMS for the journal articles — right now they're hardcoded, which is fine for a mockup but doesn't scale.
+I'm two days ahead of schedule. The salon was supposed to take until Friday. It's Wednesday and I'm starting the Shopify store tomorrow morning.
 
-The key insight: knowing what NOT to build is as important as knowing what to build. The Mindbody API integration would have taken 2-3 days and proven the same skill (API integration) that the Shopify store already covers in my portfolio. Scope discipline kept me on schedule.
+More importantly — I'm starting to understand what AI-assisted development actually changes. It's not that the code writes itself. It's that the planning-to-shipping loop compresses from days to hours. The bottleneck moves from "how do I build this component" to "what should I build next." Architecture and design decisions still take the same amount of thought. Everything else goes faster.
 
-## Key Takeaway for Other Developers
-
-If you're building a portfolio to land remote work, your landing page mockup needs one interactive component that goes beyond static content. A booking calendar, a multi-step form, a filtering system — something that shows state management and user interaction. That's what employers click on. That's what makes them think "this person can handle our actual project."
+I'm genuinely excited about tomorrow. The Shopify Storefront API is the build I was most nervous about. Let's see if the same velocity holds when there's a real external API involved.
 
 ---
 
-*This is Part 2 of a 4-part series. Next: [Building a Headless Shopify Storefront with NextJS](/dispatch/headless-shopify-storefront-nextjs).*
+*This is Part 2 of a 4-part series. Next: [Day 3 — Building a Headless Shopify Storefront with Live API Data](/blog/headless-shopify-storefront-nextjs).*

@@ -1,35 +1,35 @@
 ---
-title: "Building a Headless Shopify Storefront with NextJS and the Storefront API"
-description: "A step-by-step walkthrough of building That's G — a headless e-commerce storefront using NextJS 14, the Shopify Storefront API (GraphQL), and an editorial design language inspired by Symbol Audio."
-date: "2026-03-29"
+title: "Building a Headless Shopify Storefront with NextJS — Live API Data in One Day"
+description: "Day 3 of a portfolio sprint: connecting NextJS to Shopify's Storefront API with GraphQL, building cart state management, and shipping an editorial e-commerce site inspired by Symbol Audio."
+date: "2026-03-27"
 author: "Byron Pantoja"
 tags: ["nextjs", "shopify", "storefront-api", "graphql", "headless-commerce", "tailwind-css"]
 image: "/images/dispatch/store-hero.png"
 slug: "headless-shopify-storefront-nextjs"
 ---
 
-# Building a Headless Shopify Storefront with NextJS and the Storefront API
+# Building a Headless Shopify Storefront with NextJS — Live API Data in One Day
 
-The second project in my [portfolio sprint](/dispatch/10-day-portfolio-sprint-plan) was the most technically impressive — a NextJS storefront pulling live product data from a Shopify development store via GraphQL. No hardcoded products. No mock data. Real API integration with real product images, prices, variants, and collections.
+Yesterday I [shipped the salon site in one session](/blog/building-salon-landing-page-nextjs). Today was the project I'd been nervous about: connecting a NextJS frontend to Shopify's Storefront API, pulling real product data via GraphQL, and building a functional cart — all for a brand called That's G.
 
-**Live site:** [mockup-store-thatsg.vercel.app](https://mockup-store-thatsg.vercel.app)  
+It's Thursday, March 27th. The store is live. Eight products across three collections, variant selection, cart state management, and an editorial design language inspired by [Symbol Audio](https://symbolaudio.com). All fetched from a real Shopify development store.
+
+This one was supposed to take three days. It took one.
+
+I'm starting to think the 10-day plan was wildly overestimated.
+
+**Live site:** [mockup-store-thatsg.vercel.app](https://mockup-store-thatsg.vercel.app)
 **Source:** [github.com/byronPantoja/mockup-store](https://github.com/byronPantoja/mockup-store)
 
-## Why Headless Shopify Matters for Portfolio Projects
+## The Setup Nobody Tells You About
 
-Most developer portfolios show static mockups. The Shopify storefront does something fundamentally different — it proves you can **integrate with a real production API**. When an employer clicks through the product pages and sees live data with variant pricing, they immediately understand this isn't a template. Adding a product in the Shopify admin instantly reflects on the storefront.
+Here's the thing about headless Shopify that tutorials bury: the actual API integration is simple. The setup is the hard part.
 
-For anyone targeting e-commerce development roles (which is a massive segment of remote work on platforms like OnlineJobs.ph), this is the project that closes the deal.
+You need a Shopify Partner account, a development store, a custom app with the right API scopes, a Storefront API access token, AND an Admin API token (for seeding products). None of that is difficult, but it's 10 minutes of clicking through admin panels that no amount of AI can skip.
 
-## The Architecture
+Once the tokens were in my `.env.local`, I had Claude generate a product seeding script. Eight products — four coffee bags with size variants (250g/500g/1kg), two merch items with color variants, and two gift sets. The script populated my Shopify dev store via the Admin API in about a minute. Real products, real images, real variant pricing.
 
-The system uses two Shopify APIs:
-
-**Admin API** — for seeding the store. I wrote a script that created 8 products across 3 collections (Coffee Beans, Merchandise, Gift Sets) with variants, pricing, descriptions, and images. This runs once during setup and isn't part of the deployed application.
-
-**Storefront API** — for the frontend. The NextJS app makes GraphQL queries to fetch products, collections, and individual product details. This is a public, read-only API designed for exactly this use case.
-
-The Storefront API client is surprisingly simple:
+The Storefront API client is almost disappointingly simple:
 
 ```typescript
 export async function shopifyFetch({ query, variables }) {
@@ -48,57 +48,54 @@ export async function shopifyFetch({ query, variables }) {
 }
 ```
 
-No Shopify SDK. No Hydrogen framework. Just native `fetch` with GraphQL queries. This keeps the bundle small and the architecture transparent.
+No Shopify SDK. No Hydrogen. Just `fetch` and GraphQL. That's the entire backend integration.
 
-## The Design Direction
+## The Design Study That Changed Everything
 
-I studied [Symbol Audio](https://symbolaudio.com) — a furniture company whose website uses warm cream backgrounds, bold serif typography, asymmetric editorial layouts, and full-bleed product photography. I adapted that aesthetic for a coffee brand:
+Before writing any frontend code, I studied Symbol Audio's website — a furniture company with one of the most beautiful e-commerce sites I've seen. Their design language is warm, editorial, and product-forward: cream backgrounds, bold serif typography, asymmetric grids, and full-bleed photography.
 
-- Warm cream palette with deep maroon and blue contrast sections
-- DM Serif Display for massive lowercase headings
-- Asymmetric grids alternating between large lifestyle images and product shots
-- Sharp-cornered buttons (no border-radius) for the editorial feel
-- The page scrolls through distinct visual "chapters" — each section has its own background color and layout rhythm
+I adapted that aesthetic for a coffee brand:
+- Warm cream palette (`#FAF7F2`) with deep maroon and blue contrast sections
+- Playfair Display for massive lowercase headings ("shop collections", not "Shop Collections")
+- Asymmetric collection grids — 60/40 splits, full-width atmospheric banners
+- Sharp-cornered buttons. No border-radius anywhere. This was critical to the editorial feel.
 
-The brand name "That's G" appears as the primary mark everywhere visible. "Coffee Roastery" only shows in the footer and legal copy — a deliberate branding hierarchy decision.
+The result doesn't look like a typical Shopify store. It looks like a coffee table book that happens to sell coffee. That distinction matters when employers are evaluating design sensibility alongside technical skill.
+
+## The Branding Decision
+
+The brand is "That's G" — short, punchy, memorable. The full legal name is "That's G — Coffee Roastery," but "Coffee Roastery" only appears in the footer and billing copy. Everywhere the customer sees — logo, hero, nav, product pages — it's just "That's G."
+
+This mirrors how real brands work. Symbol Audio doesn't put "audio equipment manufacturer" in their header. Apple doesn't write "consumer electronics" next to the logo. The short name leads. The descriptor lives in the fine print.
 
 ## Cart State Management
 
-The cart is managed entirely on the frontend using React Context with `useReducer`:
+The cart is managed with React Context and `useReducer`. Adding an item dispatches an `ADD_ITEM` action with the product, variant, and quantity. The reducer handles deduplication (adding the same variant twice increments quantity). Derived values — cart total and item count — compute from the items array.
 
-```typescript
-type CartAction =
-  | { type: 'ADD_ITEM'; payload: CartItem }
-  | { type: 'REMOVE_ITEM'; payload: string }
-  | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } };
-```
+The cart drawer slides in from the right with quantity controls, line totals, and a subtotal. The "Checkout" button shows a "This is a portfolio mockup" message. I considered wiring it to Shopify's real checkout flow, but that's production work — not portfolio work.
 
-Adding an item, updating quantities, and removing items all dispatch through the reducer. Derived values (cart total, item count) are computed from the items array. The cart persists across client-side navigation through the context provider wrapping the app.
+## What I Learned About Headless Commerce
 
-The cart drawer slides in from the right with a dark overlay, shows line items with quantity controls, and has a "Checkout" button that displays a "This is a portfolio mockup" message. Honest and clear.
+The Shopify Storefront API is almost too easy to work with. No rate limits for normal usage, clean GraphQL schema, good documentation. The hardest part wasn't the API integration — it was the editorial design system.
 
-## The Variant Selector
+Getting asymmetric grids to feel intentional rather than broken takes iteration. Making contrast sections (cream → maroon → cream → blue) flow as a coherent scroll rather than jarring blocks requires careful spacing and typography choices. The AI could scaffold the components, but the design taste had to come from me.
 
-Products with multiple variants (like coffee bags in 250g, 500g, and 1kg) render a selector with bordered boxes — not a dropdown. Clicking a variant updates the displayed price and ensures the correct variant ID is sent with the Add to Cart action. This is a small detail that shows employers you understand e-commerce UX patterns.
+That's the thing about AI-assisted development that I keep rediscovering: it doesn't replace judgment. It removes the friction between having a judgment call and executing it.
 
-## What I'd Do Differently
+## The Sprint So Far
 
-If this were a real client project, I'd add Shopify's checkout integration so the "Checkout" button creates a real Shopify checkout session. I'd also implement `next/image` with Shopify's CDN more aggressively for image optimization, and add product search functionality.
+Three days in. Two projects shipped. Both ahead of schedule.
 
-For the portfolio, none of that was necessary. The GraphQL integration, cart state management, dynamic routing, and collection filtering already prove the technical capabilities an employer needs to see.
+| Day | Planned | Actual |
+|-----|---------|--------|
+| Mar 25 | Start salon (Day 1 of 3) | Planned sprint, started salon |
+| Mar 26 | Continue salon (Day 2 of 3) | Salon shipped. Done. |
+| Mar 27 | Finish salon (Day 3 of 3) | Shopify store shipped. Done. |
 
-## Setup Guide for Other Developers
+Tomorrow I'm starting the dashboard. The original plan said Days 7–9. I'm starting on Day 4. If the dashboard ships in one day too, I could have the entire portfolio — all three projects plus byronpantoja.com — done by Saturday.
 
-If you want to build something similar:
-
-1. Create a Shopify Partner account and a development store (free)
-2. Create a custom app in the Shopify admin with Storefront API access
-3. Copy your Storefront API access token to `.env.local`
-4. Build your GraphQL queries for products, collections, and single products
-5. The Storefront API has no rate limits for normal usage — it scales automatically
-
-The entire Shopify setup takes about 10 minutes. The product seeding (if you use the Admin API) takes another 30 minutes. The frontend build is where you spend the real time.
+A 10-day sprint in 5 days. We'll see.
 
 ---
 
-*This is Part 3 of a 4-part series. Next: [Building a Full-Stack Dashboard with Supabase Auth and Postgres](/dispatch/full-stack-dashboard-supabase-nextjs).*
+*This is Part 3 of a 4-part series. Next: [Day 4 — The Dashboard Became a Full-Stack Supabase App](/blog/full-stack-dashboard-supabase-nextjs).*
