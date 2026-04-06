@@ -28,8 +28,8 @@ export function AboutSection() {
           {/* Left — editorial headline */}
           <ScrollReveal className="md:col-span-7">
             <h3 className="font-artist text-[2rem] md:text-[2.5rem] leading-[1.2] text-[#F5F5F0]">
-              I learn technical things fast, then make them{' '}
-              <em className="italic">understandable</em> for everyone else.
+              I&apos;ve been a business owner{' '}
+              <em className="italic">longer than I&apos;ve been a developer.</em>
             </h3>
           </ScrollReveal>
 
@@ -37,17 +37,16 @@ export function AboutSection() {
           <ScrollReveal className="md:col-span-5">
             <div className="space-y-6">
               <p className="font-narrator text-sm md:text-base text-[#8A8A85] leading-relaxed">
-                For 14+ years at Coffee For Peace, a family social enterprise
-                supporting 880+ farming families across the Philippines, I've
-                been the technical bridge — building websites, earning quality
-                certifications, designing brand identity, and translating all of
-                it into tools the team could use on the ground.
+                For 14 years I ran the digital side of Coffee for Peace — a
+                family social enterprise supporting 880+ farming families across
+                the Philippines. Real org. Real stakes. Websites, brand
+                identity, certifications, and tools the team used in the field.
               </p>
               <p className="font-narrator text-sm md:text-base text-[#8A8A85] leading-relaxed">
-                Now I build modern web applications with NextJS, React, and
-                Tailwind CSS. I work with AI as a development partner — Claude
-                handles boilerplate and scaffolding so I can focus on
-                architecture, design decisions, and shipping.
+                Now I build full-stack apps with Next.js, React, and Supabase —
+                using AI as a development partner. I ship faster than a
+                traditional developer. And I&apos;ll walk you through how to
+                maintain your own site using AI. No dependency. No gatekeeping.
               </p>
             </div>
           </ScrollReveal>

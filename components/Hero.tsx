@@ -7,8 +7,8 @@ export function Hero() {
         <ScrollReveal>
           {/* Headline */}
           <h1 className="font-artist text-[2.5rem] md:text-[4rem] lg:text-[5rem] leading-[1.1] mb-10 text-[#F5F5F0] max-w-[900px]">
-            I turn complex technical things{' '}
-            <em className="italic">into tools people actually use.</em>
+            I build websites fast.{' '}
+            <em className="italic">Then I show you how to run them.</em>
           </h1>
         </ScrollReveal>
 
@@ -31,9 +31,9 @@ export function Hero() {
         <div className="flex justify-between items-end">
           <ScrollReveal className="max-w-md">
             <p className="font-narrator text-sm md:text-base text-[#8A8A85] leading-relaxed">
-              Web developer based in Davao, Philippines. 14+ years turning brand
-              strategy and operations into digital tools. Currently seeking
-              remote opportunities.
+              14 years running a social enterprise taught me what a website
+              needs to actually do. Now I build full-stack apps with AI — and
+              hand you the knowledge to make changes yourself.
             </p>
           </ScrollReveal>
 

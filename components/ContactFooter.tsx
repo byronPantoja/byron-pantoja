@@ -16,7 +16,7 @@ export function ContactFooter() {
 
           <ScrollReveal>
             <h3 className="font-artist text-[2.5rem] md:text-[4rem] lg:text-[5rem] leading-[1.1] text-[#F5F5F0] mb-12 md:mb-16 max-w-4xl mx-auto">
-              Available for <em className="italic">remote</em> work.
+              Let&apos;s build <em className="italic">something.</em>
             </h3>
           </ScrollReveal>
 
