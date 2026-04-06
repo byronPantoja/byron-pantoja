@@ -1,0 +1,130 @@
+---
+title: "The Sprint Was Practice. Coffee for Peace Was the Real Thing."
+description: "After building three portfolio mockups in five days, I rebuilt a real organization's website — headless WordPress, Next.js 16, GSAP animations, and a breaking change that only shows up in production."
+date: "2026-04-06"
+author: "Byron Pantoja"
+tags: ["nextjs", "wordpress", "headless-cms", "performance", "gsap", "ai-assisted-development"]
+image: "/images/dispatch/cfp-hero.png"
+slug: "building-coffeeforpeace-headless-wordpress-nextjs"
+---
+
+# The Sprint Was Practice. Coffee for Peace Was the Real Thing.
+
+Two weeks ago I sat down with a [10-day sprint plan](/blog/10-day-portfolio-sprint-plan) and built three portfolio mockups in five days. A [salon site](/blog/building-salon-landing-page-nextjs). A [headless Shopify storefront](/blog/headless-shopify-storefront-nextjs). A [full-stack dashboard with Supabase auth](/blog/full-stack-dashboard-supabase-nextjs). All deployed. All documented. Portfolio done.
+
+Then I got to work on the project I'd been putting off.
+
+Coffee for Peace is my family's social enterprise. We've been publishing stories from Mindanao's conflict-affected highlands for 18 years. I've been their web developer for all of them. The old WordPress theme was slow, rigid, and impossible to push beyond what the theme allowed. It needed to be rebuilt — properly.
+
+The difference between the sprint and this: the sprint had clean repos and no stakes. This was a live organization. Real writers. Real donors. 124 published stories going back 18 years. The wrong decision and content breaks. The wrong deployment and the site goes down.
+
+**Live site:** [coffeeforpeace.com](https://coffeeforpeace.com)
+**Source:** [github.com/byronPantoja/coffeeforpeace](https://github.com/byronPantoja/coffeeforpeace)
+
+## The Architecture Decision
+
+The hardest part of this project was deciding what NOT to change.
+
+Their writers know WordPress. Every story, every photo, every category lives in WordPress. Migrating that content to a different CMS would mean rebuilding an 18-year archive, retraining writers, and breaking a workflow that nobody complained about. The CMS wasn't the problem. The frontend was.
+
+Headless was the call: keep WordPress exactly as-is, replace the presentation layer with Next.js. Their writers keep their dashboard. Readers get a modern site. The WordPress REST API at `cms.coffeeforpeace.com` serves content as JSON. Next.js on Vercel handles rendering. Neither side needs to know how the other works.
+
+This is the architecture I'll be pitching to clients. The sprint proved I could build fast. This project proves I can make the right architectural call for a real organization with existing infrastructure.
+
+## Three Layers, Built in Order
+
+I structured the build so each layer was independently shippable. Foundation first. Design second. Motion third. If anything failed, the layer beneath it would go live.
+
+**The foundation** was the API layer — before any UI existed. TypeScript interfaces built from live API responses. Every property `readonly`. An `wpFetch<T>()` helper with caching tags and revalidation intervals. Six public functions for fetching posts, slugs, categories, and pages. Then 44 tests, all written before any component. Every test was red before it was green.
+
+ISR strategy: post lists revalidate every 30 minutes, individual posts every hour, categories every 24 hours, plus a webhook endpoint for instant revalidation when something publishes in WordPress. At build time: 132 statically-rendered pages, served from the edge, with no database calls on request.
+
+**The design** was about earning the brand. Coffee for Peace isn't a typical coffee company — it's a peacebuilding organization that happens to produce specialty coffee from conflict-affected areas. The design had to hold both things. I settled on an editorial magazine aesthetic: Instrument Serif for headings, generous whitespace, photography treated as a first-class element.
+
+Three anchor colors: deep maroon (`#6A0000`), warm paper (`#F6F4F4`), charcoal (`#1C1B1A`). All mapped to CSS custom properties. No raw hex values anywhere in the component code — everything goes through tokens.
+
+The homepage is five sections: a full-viewport hero with a real CMS photo from the highlands. A dark topographic pillars section. An asymmetric 3+2 blog grid with a spinning SVG seal that reads "PEACE IN EVERY CUP • EST. 2008." An impact stats section — 18+ years, 10,000+ farmers, 124 stories — with large serif numbers that count up on scroll. A CTA section over a full-bleed image.
+
+Every photograph runs through a CSS filter class (`img-earthy`) that adds subtle sepia and warms the tones. On hover, the filter lifts. One class, applied globally. Every photo on the site feels like it belongs to the same visual world.
+
+**The animation layer** was built with one rule: it's enhancement, not requirement. The entire GSAP layer sits behind two gates — `prefers-reduced-motion` and `(hover: hover) and (pointer: fine)`. If either condition isn't met, zero animation JavaScript loads. No wasted bytes on mobile. No accessibility issues.
+
+The implementation uses `data-animate` attributes. Components are pure server components. A single `AnimationProvider` client component queries the attributes and wires up the animations. Components own structure. The provider owns motion.
+
+Headings split into words and stagger upward on scroll. The hero parallaxes as you scroll. Counters animate from zero. The CTA background lifts via clip-path. Desktop users get a custom cursor — a maroon dot with a ring that scales and changes context on images. The whole motion layer loads after `requestIdleCallback`. Zero animation JavaScript in the critical rendering path.
+
+## Then It Shipped. Then Things Got Interesting.
+
+The mockup sprint taught me that shipping fast is possible. This project taught me what actually happens after you ship.
+
+WordPress injects inline styles into post content. Gutenberg adds things like `width: 612px` directly onto image elements. That's fine inside a standard WordPress theme. Inside a carefully designed prose layout, it breaks everything — images at arbitrary widths, aligned left, busting out of the text column.
+
+I spent an afternoon writing CSS overrides for Gutenberg's output. The fix eventually became a `prose-cfp` configuration that resets Gutenberg's inline styles at the CSS level. Every story page now renders with consistent typography and image behavior regardless of what the editor did. But the lesson was real: when you go headless, you inherit the CMS's HTML quirks along with the content. Plan for it.
+
+The ISR strategy also surfaced a build problem I hadn't anticipated. The WordPress CMS is hosted separately from Vercel. At build time, Next.js was making hundreds of HTTP connections to the CMS to pre-render every story and award page. On a slow day, a cold connection to the CMS would time out — and a single timeout fails the entire build.
+
+Two-part fix: add retry logic and a timeout cap to the API client, and cap `generateStaticParams` so only the most recent posts pre-render at build time. The rest get server-rendered on first request and then cached. Builds stopped failing randomly.
+
+## The Lighthouse Audit
+
+After the build stabilized, I ran Lighthouse.
+
+| Category | Score |
+|---|---|
+| Performance | **89** |
+| Accessibility | 96 |
+| Best Practices | 100 |
+| SEO | 100 |
+
+89 performance with an LCP of 3.4 seconds. Google's threshold for "Good" is under 2.5 seconds. Everything else was clean — 60ms TTFB, 0 CLS, 1.0s FCP. The hero image was the bottleneck.
+
+Here's what didn't make sense: I had `priority` set on that image. That's the Next.js prop that's supposed to preload the image and add `fetchpriority="high"` to the rendered HTML. I'd used it correctly on every project in the sprint. The code looked right. But Lighthouse was reporting the priority hint as absent from the rendered HTML.
+
+## The Breaking Change That Only Shows Up in Production
+
+Next.js 16 deprecated the `priority` prop.
+
+The project's `AGENTS.md` file has one standing rule: read `node_modules/next/dist/docs/` before touching anything Next.js-related, because this version has breaking changes. So I read it. The image component docs are explicit: starting with Next.js 16, `priority` no longer emits `fetchpriority="high"`. The new approach is `loading="eager"` plus `fetchPriority="high"`.
+
+The prop still exists. TypeScript doesn't complain. The build succeeds. No runtime warning. The browser just never receives the priority hint, and your LCP quietly suffers.
+
+Three files. Five minutes.
+
+```tsx
+// Before — broken in Next.js 16
+<Image src={url} alt={alt} width={1920} height={700} priority />
+
+// After
+<Image src={url} alt={alt} width={1920} height={700} loading="eager" fetchPriority="high" />
+```
+
+This is the kind of bug the sprint couldn't have surfaced. Clean repos with no legacy constraints don't teach you about silent breaking changes in production. A real project with a real Lighthouse audit does.
+
+## What AI Did and Didn't Do Here
+
+Claude was my pair programmer throughout this build. It generated the initial TypeScript interfaces from API response samples. It scaffolded the test fixtures. It wrote a significant amount of the GSAP animation logic. When the Gutenberg CSS override problem was obscure, Claude helped identify where the inline styles were originating.
+
+But the Lighthouse audit — I ran that. The diagnosis — I did that, reading the actual Next.js 16 docs to understand why a prop I'd used a dozen times was suddenly not working. The ISR strategy, the decision to cap static generation instead of removing it, the call to defer GSAP via `requestIdleCallback` — those were my judgment calls.
+
+I keep writing the same thing in these posts because I keep re-learning it: AI compresses the gap between a judgment call and its execution. The judgment still has to come from somewhere. On a real project with real consequences, that somewhere is you.
+
+## The Stack
+
+If you're running a WordPress site and want a modern frontend, or you're starting from scratch and want this architecture for your organization:
+
+- **Next.js 16** on Vercel — App Router, ISR, static generation at build time
+- **WordPress REST API** — any WordPress host works, CMS stays untouched
+- **TypeScript 5** — strict types throughout, no `any`
+- **Tailwind CSS v4** — design tokens via CSS custom properties
+- **GSAP + ScrollTrigger** — scroll animations, progressive enhancement only
+- **Vitest** — unit and integration tests before any UI
+
+The CMS stays where it is. Your writers keep their workflow. The frontend is fast, modern, and fully in your control.
+
+---
+
+This is the real-world example I was working toward when I [started the sprint](/blog/10-day-portfolio-sprint-plan). The mockups proved velocity. Coffee for Peace proves judgment. If you want a headless WordPress site built with this stack — [get in touch](https://byronpantoja.com/contact).
+
+---
+
+*This post is part of a series on building a web developer portfolio with AI-assisted development: [The Plan](/blog/10-day-portfolio-sprint-plan) · [Salon Site](/blog/building-salon-landing-page-nextjs) · [Shopify Storefront](/blog/headless-shopify-storefront-nextjs) · [Dashboard + Portfolio](/blog/full-stack-dashboard-supabase-nextjs)*
