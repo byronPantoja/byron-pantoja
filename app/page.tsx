@@ -1,4 +1,3 @@
-import { Navbar } from '@/components/Navbar'
 import { Hero } from '@/components/Hero'
 import { WorkSection } from '@/components/WorkSection'
 import { AboutSection } from '@/components/AboutSection'
@@ -63,7 +62,6 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Navbar />
       <main>
         <Hero />
         <WorkSection />

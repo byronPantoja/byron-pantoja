@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { DM_Serif_Display, DM_Sans, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { Navbar } from '@/components/Navbar'
 import './globals.css'
 
 const dmSerifDisplay = DM_Serif_Display({
@@ -88,6 +89,7 @@ export default function RootLayout({
           <div className="grid-line" />
           <div className="grid-line" />
         </div>
+        <Navbar />
         {children}
         <Analytics />
       </body>
