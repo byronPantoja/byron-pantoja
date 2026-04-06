@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react'
 
 const navLinks = [
-  { label: 'WORK', href: '#work' },
-  { label: 'ABOUT', href: '#about' },
+  { label: 'WORK', href: '/#work' },
+  { label: 'ABOUT', href: '/#about' },
   { label: 'DISPATCH', href: '/dispatch' },
-  { label: 'CONTACT', href: '#contact' },
+  { label: 'CONTACT', href: '/#contact' },
 ]
 
 export function Navbar() {
@@ -38,7 +38,7 @@ export function Navbar() {
       <div className="backdrop-blur-md bg-[#0C0C0C]/80 px-6 md:px-12 py-5 flex justify-between items-center">
         {/* Name */}
         <a
-          href="#"
+          href="/"
           className="font-narrator text-[#F5F5F0] text-sm md:text-base font-medium tracking-[0.05em]"
         >
           Byron Pantoja

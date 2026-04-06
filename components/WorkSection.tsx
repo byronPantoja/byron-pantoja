@@ -16,6 +16,18 @@ interface Project {
 const projects: Project[] = [
   {
     number: '01',
+    title: 'Coffee for Peace',
+    type: 'Headless WordPress — Real Organization',
+    description:
+      'Full rebuild of a live social enterprise site serving 18 years of stories from Mindanao\'s conflict-affected highlands. Headless WordPress REST API with Next.js 16, ISR, GSAP scroll animations, and a custom Gutenberg CSS layer.',
+    tags: ['Next.js 16', 'WordPress API', 'TypeScript', 'Tailwind CSS v4', 'GSAP'],
+    siteUrl: 'https://coffeeforpeace.com',
+    githubUrl: 'https://github.com/byronPantoja/coffeeforpeace',
+    image: '/images/cfp-screenshot.png',
+    imageAlt: 'Coffee for Peace — headless WordPress site screenshot',
+  },
+  {
+    number: '02',
     title: 'Serenity Studio',
     type: 'Service Business Landing Page',
     description:
@@ -27,7 +39,7 @@ const projects: Project[] = [
     imageAlt: 'Serenity Studio — wellness booking site screenshot',
   },
   {
-    number: '02',
+    number: '03',
     title: "That's G",
     type: 'Headless Shopify Storefront',
     description:
@@ -39,7 +51,7 @@ const projects: Project[] = [
     imageAlt: "That's G — headless Shopify storefront screenshot",
   },
   {
-    number: '03',
+    number: '04',
     title: 'BaseLine',
     type: 'Full-Stack Operations Dashboard',
     description:
@@ -88,7 +100,7 @@ export function WorkSection() {
           </div>
         </ScrollReveal>
 
-        {/* Project 1: Serenity Studio — Large feature */}
+        {/* Project 1: Coffee for Peace — Large feature */}
         <ScrollReveal className="mb-24 md:mb-40">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
             {/* Image — 65% */}
@@ -130,7 +142,7 @@ export function WorkSection() {
           </div>
         </ScrollReveal>
 
-        {/* Project 2: That's G — Offset, image right */}
+        {/* Project 2: Serenity Studio — Offset, image right */}
         <ScrollReveal className="mb-24 md:mb-40">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 md:mt-16">
             {/* Info — left (on desktop) */}
@@ -172,7 +184,49 @@ export function WorkSection() {
           </div>
         </ScrollReveal>
 
-        {/* Project 3: BaseLine — Contained card */}
+        {/* Project 3: That's G — Large feature */}
+        <ScrollReveal className="mb-24 md:mb-40">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+            {/* Image — 65% */}
+            <div className="md:col-span-8 overflow-hidden group cursor-pointer">
+              <div className="image-reveal">
+                <Image
+                  src={projects[2].image}
+                  alt={projects[2].imageAlt}
+                  width={1200}
+                  height={675}
+                  className="project-image w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                />
+              </div>
+            </div>
+            {/* Info — 35% */}
+            <div className="md:col-span-4 flex flex-col justify-center">
+              <span className="font-engineer text-4xl md:text-5xl text-[#8A8A85]/30 mb-4">
+                {projects[2].number}
+              </span>
+              <h3 className="font-artist text-2xl md:text-3xl text-[#F5F5F0] mb-2">
+                {projects[2].title}
+              </h3>
+              <p className="font-engineer text-[0.65rem] tracking-[0.15em] text-[#8A8A85] uppercase mb-6">
+                {projects[2].type}
+              </p>
+              <p className="font-narrator text-sm text-[#8A8A85] leading-relaxed mb-6">
+                {projects[2].description}
+              </p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {projects[2].tags.map((tag) => (
+                  <TechTag key={tag} label={tag} />
+                ))}
+              </div>
+              <div className="flex gap-6">
+                <ProjectLink href={projects[2].siteUrl} label="View Site" />
+                <ProjectLink href={projects[2].githubUrl} label="GitHub" />
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        {/* Project 4: BaseLine — Contained card */}
         <ScrollReveal>
           <div className="max-w-[900px]">
             <div className="bg-[#161616]">
@@ -180,8 +234,8 @@ export function WorkSection() {
               <div className="overflow-hidden group cursor-pointer">
                 <div className="image-reveal">
                   <Image
-                    src={projects[2].image}
-                    alt={projects[2].imageAlt}
+                    src={projects[3].image}
+                    alt={projects[3].imageAlt}
                     width={1200}
                     height={675}
                     className="project-image w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-700"
@@ -191,25 +245,25 @@ export function WorkSection() {
               {/* Info — below image */}
               <div className="p-8 md:p-10">
                 <span className="font-engineer text-4xl md:text-5xl text-[#8A8A85]/30 mb-4 block">
-                  {projects[2].number}
+                  {projects[3].number}
                 </span>
                 <h3 className="font-artist text-2xl md:text-3xl text-[#F5F5F0] mb-2">
-                  {projects[2].title}
+                  {projects[3].title}
                 </h3>
                 <p className="font-engineer text-[0.65rem] tracking-[0.15em] text-[#8A8A85] uppercase mb-6">
-                  {projects[2].type}
+                  {projects[3].type}
                 </p>
                 <p className="font-narrator text-sm text-[#8A8A85] leading-relaxed mb-6">
-                  {projects[2].description}
+                  {projects[3].description}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {projects[2].tags.map((tag) => (
+                  {projects[3].tags.map((tag) => (
                     <TechTag key={tag} label={tag} />
                   ))}
                 </div>
                 <div className="flex gap-6">
-                  <ProjectLink href={projects[2].siteUrl} label="View Site" />
-                  <ProjectLink href={projects[2].githubUrl} label="GitHub" />
+                  <ProjectLink href={projects[3].siteUrl} label="View Site" />
+                  <ProjectLink href={projects[3].githubUrl} label="GitHub" />
                 </div>
               </div>
             </div>
