@@ -111,6 +111,8 @@ export function WorkSection() {
                   alt={projects[0].imageAlt}
                   width={1200}
                   height={675}
+                  sizes="(max-width: 768px) 100vw, 66vw"
+                  priority
                   className="project-image w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-700"
                 />
               </div>
@@ -177,6 +179,7 @@ export function WorkSection() {
                   alt={projects[1].imageAlt}
                   width={1200}
                   height={675}
+                  sizes="(max-width: 768px) 100vw, 58vw"
                   className="project-image w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-700"
                 />
               </div>
@@ -195,6 +198,7 @@ export function WorkSection() {
                   alt={projects[2].imageAlt}
                   width={1200}
                   height={675}
+                  sizes="(max-width: 768px) 100vw, 66vw"
                   className="project-image w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-700"
                 />
               </div>
@@ -238,6 +242,7 @@ export function WorkSection() {
                     alt={projects[3].imageAlt}
                     width={1200}
                     height={675}
+                    sizes="(max-width: 768px) 100vw, 900px"
                     className="project-image w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-700"
                   />
                 </div>
