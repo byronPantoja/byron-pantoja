@@ -1,0 +1,114 @@
+---
+title: "The Spec Was Fictional. The Operator Was Real."
+description: "Building a lot-traceable inventory app for a real coffee roastery — from green beans to packed bags, with two-way Shopify sync. The data model that almost went wrong, the schema decisions that only came from asking the actual operator, and what an AI can and can't do when the stakes are real."
+date: "2026-04-08"
+author: "Byron Pantoja"
+tags: ["nextjs", "supabase", "shopify", "inventory", "ai-assisted-development", "coffee", "internal-tools"]
+image: "/images/dispatch/kapeyapaan-ops-hero.png"
+slug: "building-kapeyapaan-ops-app"
+---
+
+# The Spec Was Fictional. The Operator Was Real.
+
+The coffeeforpeace.com rebuild shipped on April 3rd. By April 7th I had started the project I'd been putting off for longer than I care to admit.
+
+Coffee for Peace has a production problem. Not a website problem. Every kilo of green coffee that comes in from the highlands gets roasted, packed, and sold — and right now there's no system that connects those dots. A bag leaves the roastery and we know it was packed. We don't know which roast batch it came from, which farmer lot fed that batch, which cooperative that farmer belongs to. The story of that coffee exists in someone's head and on scraps of paper.
+
+The whole point of the [coffeeforpeace.com](https://coffeeforpeace.com) rebuild was to tell that story publicly. Now I needed to build the thing that makes the story true.
+
+**Source:** [github.com/byronPantoja/kapeyapaan-ops](https://github.com/byronPantoja/kapeyapaan-ops)
+
+## The Problem Is a Graph, Not a Spreadsheet
+
+My first instinct was to reach for Google Sheets. The data is already in Google. The team uses Google Workspace. Sheets is comfortable. When I started the brainstorm with Claude, I said exactly that — use Google as much as possible unless Supabase is genuinely better.
+
+Claude pushed back, and it was the kind of pushback worth listening to.
+
+A bag's provenance is a graph of foreign keys. Pack batch → multiple roast batches → multiple green lots → farmers → organizations → origins. That's a relational query. Postgres does it in a single join. Sheets makes you write loops in Apps Script. Firestore makes you denormalize until your data is unrecognizable. And on top of that: multi-user concurrent writes from phones on the production floor, append-only event logs that can't be quietly edited, RLS-enforced separation between admins and operators. These are things Postgres has solved for decades.
+
+But I still wanted Sheets in the loop, so we found a compromise: Google Sheets becomes a *downstream reporting mirror*. A nightly Edge Function exports inventory snapshots and sales summaries to a sheet I own. The operational write path goes through Postgres. The analyst workflow — opening a sheet, poking at numbers, handing it to an accountant — stays in Sheets. Google OAuth is the only sign-in method, so even though the database is Postgres, every team member still uses their Coffee for Peace Google account to log in.
+
+The "Google ecosystem" feeling is preserved at the layer where it actually matters to the people using it. The data layer is correct underneath.
+
+This was the decision I would have gotten wrong if I'd just done what felt comfortable. The lesson I keep relearning: when you're working with an AI partner, the value isn't in the answers it agrees with you on. It's in the ones it pushes back on with a reason you can verify.
+
+## Append-Only Is a Philosophy, Not Just a Pattern
+
+The other foundational decision: every inventory event is append-only. Operators log green lot arrivals, roast batches, and packing sessions. They cannot edit what they wrote. Even admins cannot UPDATE a row. If something is wrong, an admin issues a *correction* — a new row in `inventory_corrections` that references the original entry, names the field, records both values, and requires a reason.
+
+This sounds rigid until you think about why the system exists.
+
+The traceability story is only as strong as the immutability of the chain. If a roast batch can be silently edited, then "this bag came from Lot GL-2026-0007, grown by Juan Dela Cruz of the Matutum Coffee Growers Cooperative" is not a faithful record — it's whatever the database happens to say right now. Append-only with explicit corrections means every change is explained and dated. That's what makes the QR code on the bag actually mean something.
+
+Postgres enforces this at the RLS layer. There is no UPDATE policy. Even if I write buggy application code, the database refuses the write. The integrity of the record isn't dependent on the correctness of my implementation.
+
+## The Schema Was Wrong Until I Asked the Right Person
+
+I designed the inventory stages as: green beans → roast batch → roasted bin → blend batch → blended bin → pack batch. Five stages. Blend batch was its own table with a blend ratio column.
+
+When I walked through this with Byron, he stopped me at the third step. "We don't bulk-blend. Each individual bag is its own ratio. We pack a 250g bag of 80/20 by weighing 200g of Arabica and 50g of Robusta into that specific bag."
+
+The entire blend batch stage didn't exist. Blending happens at pack time, per packing session, per bag ratio. The schema collapsed to something cleaner:
+
+- `pack_batches` is the packing session — "we packed 40 bags of 80/20 today"
+- `pack_batch_sources` is the join table — one row per source roast batch consumed in that session
+- For a pure roast, one source row. For a blend, two or more.
+- The ratio is derived: `kg_used / total_kg_used` per source.
+
+Fewer tables. More accurate. I would not have gotten this right from a spec alone.
+
+This is the part of inventory work that nobody who hasn't done it really gets. The data model is wrong until you watch the actual humans do the actual job. The schema you design from a spec is always slightly fictional. The schema you design from a conversation with the operator is real.
+
+The QR code on the bag — the customer-facing payoff for all of this — resolves to a query that traverses that graph: this bag, this pack session, these roast batches, these green lots, these farmers, these cooperatives. That query only works if the schema matches reality. It only matches reality if I asked.
+
+## What Built in a Day
+
+After the design was locked — nine sections, every decision documented — the implementation happened in a single day across four plans run by AI agents in parallel worktrees.
+
+**Plan 1 (Foundation):** Next.js 16 app scaffolded on Vercel, six Supabase migrations covering every table and view, RLS policies, triggers for per-bag unit generation, Google OAuth via Supabase Auth, route protection middleware.
+
+**Plan 2 (Inventory Core):** Zod schemas and typed `ActionResult<T>` unions for every Server Action. Three operator forms — green lot arrival, roast batch, pack batch with multi-source blend support. Mobile-first operator UI with bottom navigation, a live stock view, and a provenance lookup that takes a bag code and traverses the full chain.
+
+**Plan 3 (Shopify Sync):** Four Supabase Edge Functions. `shopify-webhooks` receives inbound orders, verifies HMAC signatures with the Web Crypto API, maps line items to packed SKUs, and writes unmapped variants to a warnings table instead of failing — because a dead letter that returns 200 is more reliable than a 5xx that Shopify retries forever. `shopify-push` fires on every new pack batch via a `pg_net` database trigger. `shopify-retry` and `shopify-reconcile` run on cron — the reconciliation function detects drift but never auto-corrects it, because silently overwriting a manual Shopify adjustment would defeat the purpose.
+
+**Plan 4 (Admin Dashboard):** Desktop-first layout with a sidebar. Dashboard with metrics. Unified audit log. Sync health monitoring for warnings and drift. User whitelist management. SKU catalog with Shopify variant mapping. A one-time bootstrap script that maps existing Shopify variants to database SKUs by matching SKU codes.
+
+The spec said six weeks. It took one day.
+
+## What Actually Broke
+
+Three things caught during review that the AI didn't catch on its own.
+
+**The duplicate route.** Both `(admin)/page.tsx` and `(operator)/page.tsx` resolved to `/` because route groups don't add URL segments. Next.js threw a build error; the fix was moving all admin pages under an `admin/` subfolder so they resolve to `/admin/*`. Obvious in retrospect, not caught during implementation.
+
+**The middleware convention.** Next.js 16 renamed `middleware.ts` to `proxy.ts` — same functionality, different filename. The old name still ran but printed a deprecation warning at startup. This only surfaced when I actually started the dev server. The fix was a rename and a function export change. Two minutes. But it wasn't in any training data about Next.js conventions, which is why the [AGENTS.md](https://github.com/byronPantoja/kapeyapaan-ops/blob/main/AGENTS.md) now says to read `node_modules/next/dist/docs/` before touching anything Next.js-related.
+
+**The nullable key.** The users admin table was keyed on `user.id`, which is a nullable UUID — it only populates when the user actually signs in for the first time. Whitelisted-but-never-signed-in users have `id = null`, which React flags as duplicate keys. The fix was keying on `user.email` (the actual primary key of the table). Caught in the browser console on first render.
+
+None of these were complex bugs. All three were caught immediately once the app was running. But none were caught by the agent that wrote the code.
+
+## What AI Did and Didn't Do
+
+The agents implemented all four plans in one day: six database migrations, RLS policies, trigger functions, Server Actions with Zod validation, three operator forms, five admin pages, four Edge Functions, a bootstrap script. The schema design, the append-only discipline, the Shopify sync architecture — all of that came from the AI working through the spec.
+
+What the AI didn't do: catch any of the three runtime bugs. The duplicate route, the deprecated convention, the nullable ID — none of those appeared until I ran the app. The AI also didn't know that blending happens at pack time rather than in a separate batch stage. That insight came from asking Byron. The AI worked from what I gave it; it couldn't correct a spec that was wrong.
+
+The ratio I'm settling on: the AI compressed the distance between a decision and its implementation. What used to take six weeks of deliberate effort took one day of directed implementation. But the decisions themselves — what to build, how the actual production process works, which bugs to look for when the code is running — those still required a human paying attention.
+
+The bit I find most useful: the AI's best contributions were when it pushed back on something I was about to do wrong. The Google-vs-Supabase decision. Deferring the chat-based entry interface to v1.1 rather than building it speculatively from day one. "Let operators use forms for a few weeks and find the real pain points before designing the chat layer" is the kind of advice that saves months of work — and it came from the AI, not from me.
+
+## What's Next
+
+The Google Sheets reporting mirror ships next — eight tabs, nightly Edge Function, service account credentials, overwrite-not-append policy. That's the last piece of v1.
+
+v1.1 is the chat interface: an `/assistant` route where an operator can type "finished a roast, 5kg of GL-2026-0007, light Arabica, got 4.2kg out" and get a structured preview to confirm before the database write fires. The Server Actions are already shaped like tool definitions. Wiring Claude up as a tool-using agent is a thin layer on top of what's already there.
+
+The QR codes come after that. Every bag already has a unique ID. Resolving it to a provenance page is one RPC call. What's left is the label design and a public-facing route that doesn't require login.
+
+---
+
+The coffeeforpeace.com rebuild told the story of the coffee. This is the system that makes the story true.
+
+---
+
+*This post is part of a series on building a web developer portfolio with AI-assisted development: [The Plan](/dispatch/10-day-portfolio-sprint-plan) · [Salon Site](/dispatch/building-salon-landing-page-nextjs) · [Shopify Storefront](/dispatch/headless-shopify-storefront-nextjs) · [Dashboard + Portfolio](/dispatch/full-stack-dashboard-supabase-nextjs) · [Coffee for Peace](/dispatch/building-coffeeforpeace-headless-wordpress-nextjs)*
