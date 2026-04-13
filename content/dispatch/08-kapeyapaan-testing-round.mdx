@@ -1,0 +1,87 @@
+---
+title: "The Version That Works When Someone Else Uses It"
+description: "Moving the ops app from 'built' to 'being used.' What real use surfaced: a search tool that couldn't really search, an admin that couldn't delete anything, and a mobile layout that cut off on every iPhone. Plus: why the Shopify sync is deliberately parked."
+date: "2026-04-14"
+author: "Byron Pantoja"
+tags: ["nextjs", "supabase", "shopify", "inventory", "ai-assisted-development", "coffee", "internal-tools", "testing"]
+image: "/images/dispatch/kapeyapaan-ops-hero.png"
+slug: "kapeyapaan-ops-testing-round"
+---
+
+# The Version That Works When Someone Else Uses It
+
+There's a version of an app that works when you're building it. And there's a version that works when someone else is using it. The gap between those two is what the last week has been about.
+
+The ops app has been in real use since the Kaizen round shipped. Operators logging green lot arrivals. Byron checking stock before the morning roast. Someone trying to find where a batch went. That's a different kind of pressure than a code review. You don't get that feedback from a spec. You get it from someone saying: "I can't delete this."
+
+**Source:** [github.com/byronPantoja/kapeyapaan-ops](https://github.com/byronPantoja/kapeyapaan-ops)
+
+## Find Coffee: From Lookup to Navigation
+
+The original "Provenance Lookup" tool was exactly what the name implied — type a lot code, get the downstream history. Useful if you already knew the code. Useless if you didn't.
+
+The person using the app often doesn't know the code. They know the farmer's name. They know the origin. They know which destination a batch was shipped to. They know it was packed last Tuesday. Lot codes are internal identifiers. They're a detail of the system's model, not the user's mental model.
+
+The tool was renamed "Find Coffee" and rebuilt. It now handles both paths. Type a code prefix — `GL-`, `RB-`, `PB-` — and you get the full structured provenance view for that record. Type anything else — a farmer name, an origin, a variety, a destination, a harvest year — and it fans out across the schema in parallel: farmers, origins, SKUs, destinations, then lots and pack batches. Results are grouped and deduplicated. A roast batch card links to its green lot. A pack batch card links to its source roast batches. You can drill through the chain without ever knowing a code.
+
+The implementation is a single `searchCoffee` server action that branches based on the query prefix. The free-text path runs six parallel Supabase queries, reduces, and deduplicates. Under a second on cold start.
+
+The rename matters as much as the rebuild. "Provenance Lookup" told users: I help you decode a code you already have. "Find Coffee" tells them: I help you find what you're looking for. That's a different contract. It required a different implementation to honor it.
+
+## The Admin Couldn't Delete Anything
+
+This one was embarrassing to find in production.
+
+Every attempt to delete a farmer, an origin, a farmer organization — silently failed. No error surfaced. The row stayed. The dialog closed, the page refreshed, and the same record appeared.
+
+The server action was correct. The Supabase client call was correct. The problem was a line in the original RLS migration, written on day one: *"No DELETE ever."*
+
+Reference tables — farmers, origins, farmer organizations, roast profiles, packed SKUs — had SELECT, INSERT, and UPDATE policies. Nothing for DELETE. Supabase denies by default. Every delete call hit a policy gap, returned success with zero rows affected, and the UI had no way to know the difference.
+
+The fix was a new migration: admin DELETE policies on all five reference tables. One policy each, using the same `auth_role() = 'admin'` pattern as the existing update policies. Foreign key constraints remain the real guard — a farmer with attached green lots still can't be deleted; Postgres enforces that at the constraint level. But a farmer entered with a typo can now be corrected.
+
+The pattern here is consistent. The original policies were written for an append-only inventory system, then applied without adjustment to the reference data where deletes are legitimate operational maintenance. The agents implemented the policies they were given. The spec didn't distinguish between "append-only because edits must be tracked" and "no delete because the design never considered it." That distinction is exactly the kind of thing that doesn't surface until someone tries to do it.
+
+## CRUD Is the Minimum Viable Admin
+
+The broader admin work happened in the same round. Edit and delete on every catalog entity — farmers, origins, farmer organizations, destinations. Per-row edit and deactivate on users, with a guard that prevents an admin from deactivating their own account. An issue correction dialog that accepts a lot code or pack code, resolves it to the right database record server-side, and writes the correction through the same audit-tracked flow.
+
+The motivation is simple. A system where admins can add records but not correct them isn't an admin interface — it's a write-once ledger with a nice header. The inventory tables are intentionally append-only. The reference data is not. Every correction to a farmer name or a mislabeled origin had to go through the database directly. That's not a workflow. That's a support dependency.
+
+Every mutation goes through a server action that checks role. The UI doesn't know what the user can do — it calls the action, handles the result, and refreshes. Role enforcement lives in the server, not the client.
+
+## The Admin on Mobile
+
+The admin dashboard was designed desktop-first. Byron checks it on his phone.
+
+Three things broke.
+
+`h-screen overflow-hidden` on the outer wrapper used `100vh`. On iOS Safari, `100vh` includes the browser toolbar in the height calculation. When the toolbar is visible on page load, `100vh` is taller than the actual visible area. Content at the bottom was physically unreachable — `overflow-hidden` prevented the page from scrolling to get there. No error. No visual indication. Just a screen that looked complete but wasn't.
+
+The fix: `min-h-dvh flex-col` on mobile, letting the page scroll naturally as a normal document. The fixed `h-screen overflow-hidden` flex layout only engages at `lg+` for the desktop sidebar view. `dvh` is dynamic viewport height — it adjusts as the browser toolbar appears and disappears.
+
+The mobile header wasn't sticky. Scrolling down made the hamburger nav disappear with the page header, leaving no way to navigate without scrolling back to the top. Fixed with `sticky top-0 z-40`.
+
+Page headers used `flex justify-between` regardless of screen width. On a 375px phone, the section title and the summary badge competed for the same horizontal space. Fixed with `flex-col` stacking below `sm`.
+
+Three separate problems, all found by actually looking at the app on a phone. None of them appear in a desktop browser window. None would have appeared in the test suite.
+
+## What We're Not Fixing Yet
+
+The Shopify sync exists. Push triggers fire when pack batches are created. The webhook receiver handles inbound orders. The reconciliation cron runs and flags drift. The code is there.
+
+None of it has been validated against real production data.
+
+The deliberate choice: don't test the sync until the data going into the system is reliable. The sync reads from `packed_skus`, `pack_batches`, and the `shopify_variant_id` mappings. If those records are inconsistent — wrong SKU codes, unmapped variants, packing sessions logged against the wrong lot — the sync doesn't fail loudly. It pushes wrong numbers to Shopify with the same confidence it would push correct ones. That's a worse outcome than no sync.
+
+The current focus is forms and logging. Every green lot arrival, roast session, and pack run goes through the operator workflow. Reference data gets corrected through the proper admin flow, not around it. Corrections are issued with documented reasons. Once the data is trustworthy, testing the sync becomes a meaningful exercise. Before that, you're testing the plumbing on a foundation that isn't set.
+
+This is a sequencing decision, not a deprioritization. There's no value in a sync that keeps two systems consistently wrong.
+
+---
+
+The manual system worked because the people running it were careful. The goal for this one is that it works whether they are or not. The testing round is how you find out how far that goal is from the current state — and what specifically to fix next.
+
+---
+
+*This post is part of a series on building a web developer portfolio with AI-assisted development: [The Plan](/dispatch/10-day-portfolio-sprint-plan) · [Salon Site](/dispatch/building-salon-landing-page-nextjs) · [Shopify Storefront](/dispatch/headless-shopify-storefront-nextjs) · [Dashboard + Portfolio](/dispatch/full-stack-dashboard-supabase-nextjs) · [Coffee for Peace](/dispatch/building-coffeeforpeace-headless-wordpress-nextjs) · [Kapeyapaan Ops App](/dispatch/building-kapeyapaan-ops-app) · [Kaizen](/dispatch/kapeyapaan-ops-kaizen)*
