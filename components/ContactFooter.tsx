@@ -14,8 +14,8 @@ const upworkServices = [
     description: 'Homepage or landing page copy, rewritten. Scoped to your brand voice.',
   },
   {
-    label: 'AI Consulting',
-    description: '1-hour session — Claude setup and workflow for your business.',
+    label: 'AI Setup',
+    description: '1-hour session — Claude Code installed, knowledge base built around your business. $40/hr after that if you need help.',
   },
 ]
 
