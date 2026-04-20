@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { ScrollReveal } from './ScrollReveal'
 
 const capabilities = [
@@ -23,31 +24,45 @@ export function AboutSection() {
           </div>
         </ScrollReveal>
 
-        {/* Two-column layout */}
+        {/* Three-column layout: text left, photo right */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
-          {/* Left — editorial headline */}
-          <ScrollReveal className="md:col-span-7">
-            <h3 className="font-artist text-[2rem] md:text-[2.5rem] leading-[1.2] text-[#F5F5F0]">
-              I&apos;ve been a business owner{' '}
-              <em className="italic">longer than I&apos;ve been a developer.</em>
-            </h3>
-          </ScrollReveal>
+          {/* Left — headline + body */}
+          <div className="md:col-span-7 flex flex-col gap-10">
+            <ScrollReveal>
+              <h3 className="font-artist text-[2rem] md:text-[2.5rem] leading-[1.2] text-[#F5F5F0]">
+                I&apos;ve been a business owner{' '}
+                <em className="italic">longer than I&apos;ve been a developer.</em>
+              </h3>
+            </ScrollReveal>
 
-          {/* Right — body text */}
+            <ScrollReveal>
+              <div className="space-y-6">
+                <p className="font-narrator text-sm md:text-base text-[#8A8A85] leading-relaxed">
+                  For 14 years I ran the digital side of Coffee for Peace — a
+                  family social enterprise supporting 880+ farming families across
+                  the Philippines. Real org. Real stakes. Websites, brand
+                  identity, certifications, and tools the team used in the field.
+                </p>
+                <p className="font-narrator text-sm md:text-base text-[#8A8A85] leading-relaxed">
+                  Now I build websites with Next.js and Supabase — and ship every
+                  project with a custom Obsidian wiki and Claude Code setup built
+                  around your business. You leave with a site and a system. No
+                  dependency. No gatekeeping.
+                </p>
+              </div>
+            </ScrollReveal>
+          </div>
+
+          {/* Right — photo */}
           <ScrollReveal className="md:col-span-5">
-            <div className="space-y-6">
-              <p className="font-narrator text-sm md:text-base text-[#8A8A85] leading-relaxed">
-                For 14 years I ran the digital side of Coffee for Peace — a
-                family social enterprise supporting 880+ farming families across
-                the Philippines. Real org. Real stakes. Websites, brand
-                identity, certifications, and tools the team used in the field.
-              </p>
-              <p className="font-narrator text-sm md:text-base text-[#8A8A85] leading-relaxed">
-                Now I build full-stack apps with Next.js, React, and Supabase —
-                using AI as a development partner. I ship faster than a
-                traditional developer. And I&apos;ll walk you through how to
-                maintain your own site using AI. No dependency. No gatekeeping.
-              </p>
+            <div className="relative w-full aspect-[4/5] overflow-hidden">
+              <Image
+                src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&q=80&fit=crop"
+                alt="Developer workspace"
+                fill
+                className="object-cover grayscale opacity-70"
+                sizes="(max-width: 768px) 100vw, 40vw"
+              />
             </div>
           </ScrollReveal>
         </div>

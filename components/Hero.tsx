@@ -7,8 +7,8 @@ export function Hero() {
         <ScrollReveal>
           {/* Headline */}
           <h1 className="font-artist text-[2.5rem] md:text-[4rem] lg:text-[5rem] leading-[1.1] mb-10 text-[#F5F5F0] max-w-[900px]">
-            I build websites fast.{' '}
-            <em className="italic">Then I show you how to run them.</em>
+            I build your website{' '}
+            <em className="italic">and the AI setup to run it.</em>
           </h1>
         </ScrollReveal>
 
@@ -31,9 +31,9 @@ export function Hero() {
         <div className="flex justify-between items-end">
           <ScrollReveal className="max-w-md">
             <p className="font-narrator text-sm md:text-base text-[#8A8A85] leading-relaxed">
-              14 years running a social enterprise taught me what a website
-              needs to actually do. Now I build full-stack apps with AI — and
-              hand you the knowledge to make changes yourself.
+              Every project ships with a custom Obsidian wiki and Claude Code
+              setup — built around your business. All you need after that is a
+              $20/month Claude Pro subscription.
             </p>
           </ScrollReveal>
 

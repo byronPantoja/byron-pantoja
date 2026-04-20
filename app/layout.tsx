@@ -28,16 +28,16 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://byronpantoja.com'),
-  title: 'Byron Pantoja — NextJS Developer | React, Tailwind CSS, Supabase',
+  title: 'Byron Pantoja — Web Developer & AI Setup for Small Businesses',
   description:
-    'NextJS developer based in Davao, Philippines. I build production-ready web applications with React, Tailwind CSS, Shopify, and Supabase. Available for remote work.',
+    'I build your website and the AI setup to run it. Every project ships with a custom Obsidian wiki and Claude Code setup — all you need after is a $20/month Claude Pro subscription.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Byron Pantoja — NextJS Developer',
+    title: 'Byron Pantoja — Web Developer & AI Setup',
     description:
-      'I turn complex technical things into tools people actually use. Portfolio featuring NextJS, Shopify, and Supabase projects.',
+      'I build your website and the AI setup to run it. Custom Obsidian wiki + Claude Code — shipped with every project.',
     url: 'https://byronpantoja.com',
     siteName: 'Byron Pantoja',
     type: 'website',
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Byron Pantoja — NextJS Developer',
+    title: 'Byron Pantoja — Web Developer & AI Setup',
     description:
-      'NextJS developer building production-ready web applications. Available for remote work.',
+      'I build your website and the AI setup to run it. Custom Obsidian wiki + Claude Code shipped with every project.',
   },
   icons: {
     icon: [

@@ -19,6 +19,12 @@ const steps = [
     description:
       'Deploy on Vercel, write documentation, hand off clean repos with READMEs.',
   },
+  {
+    number: '04',
+    label: 'Setup',
+    description:
+      'Install Claude Code, build your Obsidian wiki, hand off the system. You leave knowing how to run your site with AI — no dev dependency.',
+  },
 ]
 
 export function ApproachSection() {
@@ -38,7 +44,7 @@ export function ApproachSection() {
 
         {/* Three columns */}
         <ScrollReveal staggerChildren staggerDelay={150}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-0">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-0">
             {steps.map((step, i) => (
               <div
                 key={step.number}
