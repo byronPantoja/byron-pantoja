@@ -57,13 +57,6 @@ export function Navbar() {
               </a>
             ))}
           </div>
-          {/* Available indicator */}
-          <div className="flex items-center gap-2 ml-4">
-            <span className="available-dot w-[6px] h-[6px] rounded-full bg-[#C4A882]" />
-            <span className="font-engineer text-[0.65rem] tracking-widest text-[#8A8A85] uppercase">
-              Available
-            </span>
-          </div>
         </div>
 
         {/* Mobile menu button */}
@@ -104,12 +97,6 @@ export function Navbar() {
                 {link.label}
               </a>
             ))}
-            <div className="flex items-center gap-2 pt-2">
-              <span className="available-dot w-[6px] h-[6px] rounded-full bg-[#C4A882]" />
-              <span className="font-engineer text-[0.65rem] tracking-widest text-[#8A8A85] uppercase">
-                Available for work
-              </span>
-            </div>
           </div>
         </div>
       )}
